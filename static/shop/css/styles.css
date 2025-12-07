@@ -1,0 +1,428 @@
+/* Root variables */
+:root {
+    --bg: #ffffff;
+    --muted: #fbfaf8;
+    --accent: #1f2937;
+    --primary: #0b7285;
+    --radius: 10px;
+}
+
+/* Global styles */
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: 'Josefin Sans', sans-serif;
+    color: #000;
+    background: var(--bg);
+}
+
+/* Top Navigation Bar */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.top-nav .left-nav,
+.top-nav .center-nav,
+.top-nav .right-nav {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 40px;
+    object-fit: contain;
+}
+
+/* Icon Buttons */
+.icon-btn {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.icon-btn .btn-text {
+    margin-left: 6px;
+}
+
+.badge {
+    background-color: red;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 12px;
+    margin-left: 4px;
+    font-size: 12px;
+}
+
+/* Banner */
+.banner {
+    width: 100%;
+    position: relative;
+    padding-top: 40%; /* height is 40% of width */
+    overflow: hidden;
+    margin-top: 68px; /* height of top-nav */
+}
+
+.banner img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 1px solid #eee;
+}
+
+/* Main container with bottom padding to prevent content hidden behind fixed bottom nav */
+.container {
+    padding: 18px;
+    padding-bottom: 100px; /* Adjust as per bottom nav height */
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Bottom Navigation - fixed at bottom */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 78px;
+    background: var(--bg);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #eee;
+    z-index: 10000;
+}
+
+.bottom-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--accent);
+    font-size: 12px;
+    user-select: none;
+}
+
+/* Product Grid */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+/* Product Card */
+.product-card {
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 12px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.15s;
+}
+
+.product-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.meta {
+    width: 100%;
+    text-align: left;
+}
+
+.meta h3 {
+    font-size: 16px;
+    margin: 0 0 6px;
+}
+
+.price {
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+/* Buttons */
+.btn {
+    background: transparent;
+    border: 1px solid #111;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn.small {
+    padding: 6px 8px;
+    font-size: 13px;
+}
+
+.btn.primary {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .banner {
+        padding-top: 50%;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .banner img {
+        width: 96%;
+    }
+
+    .container {
+        padding: 12px;
+        padding-bottom: 140px; /* Slightly more padding for mobile bottom nav */
+    }
+
+    .icon-btn .btn-text {
+        display: none;
+    }
+}
+/* Root variables */
+:root {
+    --bg: #ffffff;
+    --muted: #fbfaf8;
+    --accent: #1f2937;
+    --primary: #0b7285;
+    --radius: 10px;
+}
+
+/* Global styles */
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: 'Josefin Sans', sans-serif;
+    color: #000;
+    background: var(--bg);
+}
+
+/* Top Navigation Bar */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.top-nav .left-nav,
+.top-nav .center-nav,
+.top-nav .right-nav {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 40px;
+    object-fit: contain;
+}
+
+/* Icon Buttons */
+.icon-btn {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.icon-btn .btn-text {
+    margin-left: 6px;
+}
+
+.badge {
+    background-color: red;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 12px;
+    margin-left: 4px;
+    font-size: 12px;
+}
+
+/* Banner */
+.banner {
+    width: 100%;
+    position: relative;
+    padding-top: 40%; /* height is 40% of width */
+    overflow: hidden;
+    margin-top: 68px; /* height of top-nav */
+}
+
+.banner img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 1px solid #eee;
+}
+
+/* Main container with bottom padding to prevent content hidden behind fixed bottom nav */
+.container {
+    padding: 18px;
+    padding-bottom: 100px; /* Adjust as per bottom nav height */
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Bottom Navigation - fixed at bottom */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 78px;
+    background: var(--bg);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #eee;
+    z-index: 10000;
+}
+
+.bottom-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--accent);
+    font-size: 12px;
+    user-select: none;
+}
+
+/* Product Grid */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+/* Product Card */
+.product-card {
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 12px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.15s;
+}
+
+.product-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.meta {
+    width: 100%;
+    text-align: left;
+}
+
+.meta h3 {
+    font-size: 16px;
+    margin: 0 0 6px;
+}
+
+.price {
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+/* Buttons */
+.btn {
+    background: transparent;
+    border: 1px solid #111;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn.small {
+    padding: 6px 8px;
+    font-size: 13px;
+}
+
+.btn.primary {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .banner {
+        padding-top: 50%;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .banner img {
+        width: 96%;
+    }
+
+    .container {
+        padding: 12px;
+        padding-bottom: 140px; /* Slightly more padding for mobile bottom nav */
+    }
+
+    .icon-btn .btn-text {
+        display: none;
+    }
+}

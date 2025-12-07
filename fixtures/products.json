@@ -1,0 +1,90 @@
+[
+  {
+    "model": "shop.product",
+    "pk": 1,
+    "fields": {
+      "name": "Red Silk Saree",
+      "price": "2499.00",
+      "description": "Beautiful red silk saree.",
+      "available": true,
+      "category": "sarees"
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 2,
+    "fields": {
+      "name": "Blue Cotton Saree",
+      "price": "1299.00",
+      "description": "Comfortable blue cotton saree.",
+      "available": true,
+      "category": "sarees"
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 3,
+    "fields": {
+      "name": "Golden Party Saree",
+      "price": "3499.00",
+      "description": "Shimmery party saree.",
+      "available": false,
+      "category": "sarees"
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 4,
+    "fields": {
+      "name": "Floral Summer Dress",
+      "price": "1599.00",
+      "description": "Light floral dress.",
+      "available": true,
+      "category": "dresses"
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 5,
+    "fields": {
+      "name": "Evening Gown",
+      "price": "4999.00",
+      "description": "Elegant evening gown.",
+      "available": true,
+      "category": "dresses"
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 6,
+    "fields": {
+      "name": "Casual Sundress",
+      "price": "899.00",
+      "description": "Casual sundress.",
+      "available": true,
+      "category": "dresses"
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 7,
+    "fields": {
+      "name": "Festive Lehenga Offer",
+      "price": "2999.00",
+      "description": "Special offer lehenga set.",
+      "available": true,
+      "category": "offers"
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 8,
+    "fields": {
+      "name": "Discounted Kurta",
+      "price": "799.00",
+      "description": "Limited time offer kurta.",
+      "available": true,
+      "category": "offers"
+    }
+  }
+]

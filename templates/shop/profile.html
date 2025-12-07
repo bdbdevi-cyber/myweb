@@ -1,0 +1,191 @@
+{% extends 'shop/base.html' %}
+{% block title %}Profile{% endblock %}
+{% block banner %}{% endblock %}
+
+{% block content %}
+<div class="center-wrapper">
+  <div class="profile-widget">
+
+    <!-- Profile Title -->
+    <h2 class="profile-header">User Profile</h2>
+
+    <form method="POST" novalidate>
+      {% csrf_token %}
+
+      <div class="widget-grid">
+
+        <!-- First Name -->
+        <div class="widget-group">
+          <label for="id_first_name">First Name</label>
+          {{ u_form.first_name }}
+        </div>
+
+        <!-- Last Name -->
+        <div class="widget-group">
+          <label for="id_last_name">Last Name</label>
+          {{ u_form.last_name }}
+        </div>
+
+        <!-- Email -->
+        <div class="widget-group">
+          <label for="id_email">Email</label>
+          {{ u_form.email }}
+        </div>
+
+        <!-- Phone -->
+        <div class="widget-group">
+          <label for="id_phone">Phone Number</label>
+          {{ p_form.phone }}
+        </div>
+
+        <!-- Address -->
+        <div class="widget-group full-row">
+          <label for="id_address">Address</label>
+          {{ p_form.address }}
+        </div>
+
+      </div>
+
+      <!-- Save + Logout Buttons -->
+      <div class="widget-actions">
+        <button type="submit" class="btn widget-save">Save</button>
+        <a href="{% url 'logout' %}" class="btn widget-logout">Logout</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+<style>
+/* BODY */
+body {
+  background: #f4f6f9;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* MAIN WRAPPER */
+.center-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 94vh;
+}
+
+/* FORM CARD */
+.profile-widget {
+  background: #ffffff;
+  width: 430px;
+  padding: 45px 38px;
+  border-radius: 16px;
+  box-shadow: 0px 10px 34px rgba(0, 0, 0, 0.10);
+}
+
+/* TITLE */
+.profile-header {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 35px;
+  color: #222;
+}
+
+/* GRID */
+.widget-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 18px;
+}
+
+.full-row {
+  grid-column: span 2;
+}
+
+/* LABEL + INPUT */
+.widget-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.widget-group input,
+.widget-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f9f9ff;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.widget-group input:focus,
+.widget-group textarea:focus {
+  border-color: #4a8cff;
+  box-shadow: 0 0 4px rgba(74, 140, 255, 0.5);
+}
+
+/* Address Box */
+.widget-group textarea {
+  height: 60px;
+  resize: none;
+}
+
+/* BUTTON WRAPPER */
+.widget-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 35px;
+}
+
+/* BUTTONS */
+.btn {
+  flex: 1;
+  padding: 12px;
+  font-weight: 600;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+  transition: 0.3s;
+}
+
+.widget-save {
+  background: #1ec38b;
+  color: white;
+}
+.widget-save:hover {
+  background: #0d9e69;
+}
+
+.widget-logout {
+  background: #f0f0f5;
+  border: 1px solid #ccc;
+  color: #333;
+}
+.widget-logout:hover {
+  background: #e94848;
+  color: white;
+  border-color: #e94848;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .profile-widget {
+    width: 92vw;
+    padding: 25px 16px;
+  }
+  .widget-grid {
+    grid-template-columns: 1fr;
+  }
+  .full-row {
+    grid-column: span 1;
+  }
+  .widget-actions {
+    flex-direction: column;
+  }
+}
+</style>

@@ -1,0 +1,197 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}My Shop{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'shop/css/styles.css' %}" />
+
+    <style>
+        /* -------- PROFILE POPUP -------- */
+        .profile-popup-bg {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.55);
+            z-index: 5000;
+        }
+
+        .profile-popup-box {
+            width: 90%;
+            max-width: 360px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 14px;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 5px 18px rgba(0,0,0,0.25);
+            text-align: center;
+        }
+
+        .popup-btn {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .existing-btn {
+            background: #0d6efd;
+            color: white;
+        }
+        .new-btn {
+            background: #28a745;
+            color: white;
+        }
+        .close-btn {
+            margin-top: 10px;
+            background: #dc3545;
+            color: #fff;
+        }
+
+        /* Filters Dropup CSS Already yours */
+        .filters-dropup {
+            display: none;
+            position: absolute;
+            bottom: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.13);
+            min-width: 150px;
+            padding: 8px 0;
+            z-index: 3000;
+            flex-direction: column;
+        }
+
+        .filters-dropup a.btn {
+            width: 100%;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+            background: transparent;
+            font-size: 14px;
+            color: #000;
+        }
+        .filters-dropup a.btn:hover {
+            background: #d9e9fb;
+            color: #0b548e;
+        }
+
+        #filtersBtn { position: relative; }
+    </style>
+</head>
+<body>
+
+<!-- PROFILE POPUP -->
+<div class="profile-popup-bg" id="profilePopup">
+    <div class="profile-popup-box">
+        <h3>Select Option</h3>
+
+        <a href="{% url 'profile' %}">
+            <button class="popup-btn existing-btn">Existing User</button>
+        </a>
+
+        <a href="{% url 'signup' %}">
+            <button class="popup-btn new-btn">New User</button>
+        </a>
+
+        <button class="popup-btn close-btn" onclick="closeProfilePopup()">Close</button>
+    </div>
+</div>
+
+<!-- TOP NAV BAR -->
+<nav class="top-nav">
+    <div class="left-nav">
+        <button class="icon-btn" onclick="openProfilePopup()">
+            👤 <span class="btn-text">Profile</span>
+        </button>
+    </div>
+
+    <div class="center-nav">
+        <a href="{% url 'home' %}">
+            <img class="logo" src="{% static 'shop/images/ammuu logo.jpg' %}" alt="Logo" />
+        </a>
+    </div>
+
+    <div class="right-nav">
+        <a href="{% url 'cart' %}" class="icon-btn">
+            🛒 <span class="badge">{{ cart_count|default:0 }}</span>
+            <span class="btn-text">Cart</span>
+        </a>
+    </div>
+</nav>
+
+<!-- Banner on Home Only -->
+{% if request.resolver_match.url_name == 'home' %}
+<div class="banner">
+    <img src="{% static 'shop/images/sareeeeees.jpg' %}" alt="Banner" />
+</div>
+{% endif %}
+
+<!-- MAIN CONTENT -->
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+    <a href="{% url 'home' %}" class="nav-item">🏠<span>Home</span></a>
+    <a href="{% url 'category' 'sarees' %}" class="nav-item">🧣<span>Sarees</span></a>
+    <a href="{% url 'category' 'dresses' %}" class="nav-item">👗<span>Dresses</span></a>
+    <a href="{% url 'category' 'offers' %}" class="nav-item">🏷<span>Offers</span></a>
+
+    <span id="filtersBtn" class="nav-item">
+        🔎<span>Filters</span>
+        <div class="filters-dropup" id="filtersDropup">
+            <a href="{% url 'filters' %}?order=price_asc" class="btn">Price: Low to High</a>
+            <a href="{% url 'filters' %}?order=price_desc" class="btn">Price: High to Low</a>
+            <a href="{% url 'filters' %}?show=available" class="btn">Available Only</a>
+        </div>
+    </span>
+</nav>
+
+
+<script>
+// ---------------- PROFILE POPUP ----------------
+function openProfilePopup() {
+    document.getElementById('profilePopup').style.display = 'block';
+}
+function closeProfilePopup() {
+    document.getElementById('profilePopup').style.display = 'none';
+}
+
+
+// ---------------- FILTERS DROPUP ----------------
+document.addEventListener('DOMContentLoaded', () => {
+
+    const filtersBtn = document.getElementById('filtersBtn');
+    const filtersDropup = document.getElementById('filtersDropup');
+
+    filtersBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        filtersDropup.style.display = 
+            filtersDropup.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    document.addEventListener('click', () => {
+        filtersDropup.style.display = 'none';
+    });
+
+    filtersDropup.querySelectorAll('a.btn').forEach(link => {
+        link.addEventListener('click', () => {
+            filtersDropup.style.display = 'none';
+        });
+    });
+});
+</script>
+
+</body>
+</html>

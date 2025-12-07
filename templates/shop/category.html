@@ -1,0 +1,28 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}{{ category_name|title }} - My Shop{% endblock %}
+
+{% block content %}
+<h2>{{ category_name|title }} Products</h2>
+<section class="product-grid">
+  {% for p in products %}
+    <article class="product-card">
+      {% if p.image %}
+        <img src="{{ p.image.url }}" alt="{{ p.name }}">
+      {% else %}
+        <img src="{% static 'shop/images/placeholder.svg' %}" alt="no image">
+      {% endif %}
+      <div class="meta">
+        <h3>{{ p.name }}</h3>
+        <p class="price">₹ {{ p.price }}</p>
+        <form action="{% url 'cart_add' p.id %}" method="post">
+          {% csrf_token %}
+          <button class="btn small">Add to cart</button>
+        </form>
+      </div>
+    </article>
+  {% empty %}
+    <p>No products found in this category.</p>
+  {% endfor %}
+</section>
+{% endblock %}

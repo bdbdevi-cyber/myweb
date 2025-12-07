@@ -1,0 +1,84 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<style>
+/* (same styles as you had; kept concise) */
+.checkout-wrapper { max-width:480px; margin:20px auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 3px 12px rgba(0,0,0,0.08); }
+.checkout-wrapper h2 { text-align:center; margin-bottom:15px; font-size:22px; color:#333; }
+.form-label{ font-weight:600; margin:10px 0 5px; display:block; color:#444; }
+textarea{ width:100%; border:1px solid #ccc; border-radius:8px; padding:10px; font-size:14px; }
+.items-box{ background:#f7f7f7; padding:12px; border-radius:10px; margin:12px 0; }
+.items-box ul{ padding:0; margin:0; list-style:none; }
+.items-box li{ padding:6px 0; font-size:14px; border-bottom:1px solid #ddd; }
+.total-price{ font-size:18px; font-weight:bold; margin-top:10px; color:#111; }
+.payment-methods{ margin-top:20px; }
+.payment-method{ display:flex; align-items:center; gap:10px; padding:12px; border:1px solid #d0d0d0; border-radius:10px; margin-bottom:10px; cursor:pointer; background:#fff; }
+.payment-method:hover{ border-color:#0b6bda; background:#eaf2ff; }
+.payment-method input{ transform:scale(1.3); }
+.place-order-btn{ width:100%; background:#007bff; color:#fff; border:none; padding:12px; font-size:16px; border-radius:10px; margin-top:15px; cursor:pointer; }
+.place-order-btn:hover{ background:#005fcc; }
+.small-note{ font-size:13px; color:#666; margin-top:8px; }
+</style>
+
+<div class="checkout-wrapper">
+    <h2>Checkout</h2>
+
+    <form id="checkoutForm" method="post">
+        {% csrf_token %}
+        <label class="form-label">Delivery Address</label>
+        <textarea name="address" rows="3">{{ profile.address }}</textarea>
+
+        <h3 style="margin-top:15px;">Order Summary</h3>
+        <div class="items-box">
+            <ul>
+                {% for it in items %}
+                    <li>{{ it.qty }} × {{ it.product.name }} — ₹ {{ it.subtotal }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <p class="total-price">Total: ₹ <span id="totalAmount">{{ total }}</span></p>
+
+        <h3 style="margin-top:20px;">Select Payment Method</h3>
+        <div class="payment-methods">
+            <label class="payment-method">
+                <input type="radio" name="payment" value="cod" required> Cash on Delivery (COD)
+            </label>
+
+            <label class="payment-method">
+                <input type="radio" name="payment" value="upi"> UPI (Google Pay / PhonePe / Paytm)
+            </label>
+
+            <label class="payment-method">
+                <input type="radio" name="payment" value="card"> Debit / Credit Card (Razorpay)
+            </label>
+        </div>
+
+        <div id="upiNote" style="display:none;">
+            <p class="small-note">For UPI: you will get UPI ID & an instruction page to complete payment. After you pay, your order will be confirmed once we receive payment.</p>
+        </div>
+
+        <button id="placeBtn" class="place-order-btn" type="submit">Place Order</button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const form = document.getElementById('checkoutForm');
+    const upiNote = document.getElementById('upiNote');
+
+    // show small note if UPI selected
+    form.addEventListener('change', (e) => {
+        const val = form.payment.value;
+        if(val === 'upi') upiNote.style.display = 'block';
+        else upiNote.style.display = 'none';
+    });
+
+    // For Razorpay we will let server create an order and return a page to open checkout,
+    // so default form submit is fine. If you prefer client-side initiation, we could call fetch to create order.
+});
+</script>
+
+{% endblock %}

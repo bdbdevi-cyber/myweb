@@ -1,0 +1,41 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}Your Cart - My Shop{% endblock %}
+
+{% block content %}
+<h2>Your Cart</h2>
+{% if items %}
+  <table class='cart-table'>
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Qty</th>
+        <th>Subtotal</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for it in items %}
+      <tr>
+        <td>
+          {% if it.product.image %}
+            <img src="{{ it.product.image.url }}" alt="{{ it.product.name }}" width="40" height="40" style="vertical-align:middle; margin-right:7px;">
+          {% endif %}
+          {{ it.product.name }}
+        </td>
+        <td>{{ it.qty }}</td>
+        <td>₹ {{ it.subtotal }}</td>
+        <td>
+          <a href='{% url "cart_remove" it.product.id %}'>Remove</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class='total'>Total: ₹ {{ total }}</p>
+  <a class='btn primary' href='{% url "checkout" %}'>Proceed to Checkout</a>
+{% else %}
+  <p>Your cart is empty.</p>
+{% endif %}
+{% endblock %}

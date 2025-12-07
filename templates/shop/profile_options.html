@@ -1,0 +1,16 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+<div class="text-center">
+    <h2 class="mb-4">Welcome! Choose an option</h2>
+
+    <a href="{% url 'signup' %}" class="btn btn-primary btn-lg w-50 mb-3">
+        Create a New Account
+    </a>
+    <br>
+
+    <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg w-50">
+        Already Have an Account? Login
+    </a>
+</div>
+{% endblock %}
