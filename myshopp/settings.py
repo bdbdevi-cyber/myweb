@@ -10,7 +10,9 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "myweb-6-01tx.onrender.com",
+    ".onrender.com",
 ]
+
 
 
 # -------------------------------
