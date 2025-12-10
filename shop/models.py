@@ -23,7 +23,9 @@ class Product(models.Model):
     category = models.CharField(max_length=255)
     price = models.DecimalField(decimal_places=2, max_digits=10)
     available = models.BooleanField(default=True)
-    image = models.ImageField(upload_to='products/', blank=True, null=True)
+    # image = models.ImageField(upload_to='products/', blank=True, null=True)
+    image = models.ImageField(upload_to='products/')
+
     description = models.TextField(blank=True)
     show_on_homepage = models.BooleanField(default=True)
 
