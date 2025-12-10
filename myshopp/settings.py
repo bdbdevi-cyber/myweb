@@ -95,8 +95,8 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'myshopp.wsgi.application'
+
 
 
 # -------------------------------
@@ -154,3 +154,7 @@ RAZORPAY_KEY_SECRET = "rzp_test_secret"
 
 UPI_ID = "yourupi@bank"
 UPI_NAME = "My Shop"
+
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
