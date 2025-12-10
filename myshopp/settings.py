@@ -1,10 +1,21 @@
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'replace-this-with-a-secure-key'
-DEBUG = False
-ALLOWED_HOSTS = []
 
+DEBUG = False
+
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "myweb-6-01tx.onrender.com",
+]
+
+
+# -------------------------------
+# APPS
+# -------------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -15,34 +26,49 @@ INSTALLED_APPS = [
     'shop',
 ]
 
+
+# -------------------------------
+# MIDDLEWARE
+# -------------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',   # required for Render static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
 ]
+
 
 ROOT_URLCONF = 'myshopp.urls'
 
+
+# -------------------------------
+# TEMPLATES
+# -------------------------------
 TEMPLATES = [{
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
     'DIRS': [os.path.join(BASE_DIR, 'templates')],
     'APP_DIRS': True,
-    'OPTIONS': {'context_processors': [
-        'django.template.context_processors.debug',
-        'django.template.context_processors.request',
-        'django.contrib.auth.context_processors.auth',
-        'django.contrib.messages.context_processors.messages',
-    ]},
+    'OPTIONS': {
+        'context_processors': [
+            'django.template.context_processors.debug',
+            'django.template.context_processors.request',
+            'django.contrib.auth.context_processors.auth',
+            'django.contrib.messages.context_processors.messages',
+        ],
+    },
 }]
+
 
 WSGI_APPLICATION = 'myshopp.wsgi.application'
 
+
+# -------------------------------
+# DATABASE
+# -------------------------------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -50,51 +76,46 @@ DATABASES = {
     }
 }
 
+
 AUTH_PASSWORD_VALIDATORS = []
 
+
+# -------------------------------
+# LANGUAGE & TIME
+# -------------------------------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Static files (CSS, JS)
+
+# -------------------------------
+# STATIC FILES (Render)
+# -------------------------------
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # development
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')    # production
 
-# Media files (for images, uploads)
+
+# -------------------------------
+# MEDIA FILES
+# -------------------------------
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')   # <-- correct syntax!
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOGIN_URL = '/accounts/login/'     # Closing quote was missing!'
+
+# -------------------------------
+# LOGIN / AUTH
+# -------------------------------
 LOGIN_URL = '/login/'
 
 
+# -------------------------------
+# RAZORPAY
+# -------------------------------
 RAZORPAY_KEY_ID = "rzp_test_xxx"
-RAZORPAY_KEY_SECRET = "your_secret_here"
+RAZORPAY_KEY_SECRET = "rzp_test_secret"
 
-
-
-# Razorpay (test keys for development)
-RAZORPAY_KEY_ID = "rzp_test_xxx"         # replace with your key id
-RAZORPAY_KEY_SECRET = "rzp_test_secret"  # replace with your secret
-
-# UPI ID for your merchant account (or use your personal UPI for testing)
 UPI_ID = "yourupi@bank"
 UPI_NAME = "My Shop"
-
-
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "myweb-6-01tx.onrender.com",
-]
-
-
-
-
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-
