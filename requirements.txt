@@ -4,3 +4,6 @@ Pillow
 
 whitenoise
 gunicorn
+
+razorpay
+
