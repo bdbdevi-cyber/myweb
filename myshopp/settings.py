@@ -2,7 +2,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'replace-this-with-a-secure-key'
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
@@ -84,7 +84,12 @@ UPI_ID = "yourupi@bank"
 UPI_NAME = "My Shop"
 
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "makeup.com"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "myweb-6-01tx.onrender.com",
+]
+
 
 
 
