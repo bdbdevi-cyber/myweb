@@ -1,7 +1,15 @@
+
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+
 load_dotenv()
+
+
+
+
+
+
 
 # -------------------------------
 # BASE DIR
@@ -45,13 +53,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+     # Cloudinary
+    'cloudinary',
+    'cloudinary_storage',
     # Your app
     'shop',
 
-    # Cloudinary
-    'cloudinary',
-    'cloudinary_storage',
+
 ]
 
 
