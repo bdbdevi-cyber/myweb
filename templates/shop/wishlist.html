@@ -1,0 +1,43 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}Wishlist{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom:15px;">❤️ My Wishlist</h2>
+
+<div class="product-grid">
+    {% for item in items %}
+        {% with product=item.product %}
+        <div class="product-card">
+
+            <a href="{% url 'product_detail' product.id %}">
+                <img src="{{ product.image.url }}">
+            </a>
+
+            <div class="meta">
+                <h3>{{ product.name }}</h3>
+                <p class="price">₹ {{ product.price }}</p>
+
+                <div style="margin-top:8px;">
+                    <a href="{% url 'wishlist_remove' product.id %}"
+                       style="color:red; text-decoration:none; margin-right:10px;">
+                       ❌ Remove
+                    </a>
+
+                    <!-- BUY NOW BUTTON -->
+                    <form action="{% url 'wishlist_buy_now' product.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" style="background:#007bff; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">
+                            Buy Now
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+    {% empty %}
+        <p>No items in wishlist ❤️</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -4,38 +4,136 @@
 {% block title %}Your Cart - My Shop{% endblock %}
 
 {% block content %}
-<h2>Your Cart</h2>
-{% if items %}
-  <table class='cart-table'>
-    <thead>
-      <tr>
-        <th>Product</th>
-        <th>Qty</th>
-        <th>Subtotal</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for it in items %}
-      <tr>
-        <td>
-          {% if it.product.image %}
-            <img src="{{ it.product.image.url }}" alt="{{ it.product.name }}" width="40" height="40" style="vertical-align:middle; margin-right:7px;">
-          {% endif %}
-          {{ it.product.name }}
-        </td>
-        <td>{{ it.qty }}</td>
-        <td>₹ {{ it.subtotal }}</td>
-        <td>
-          <a href='{% url "cart_remove" it.product.id %}'>Remove</a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <p class='total'>Total: ₹ {{ total }}</p>
-  <a class='btn primary' href='{% url "checkout" %}'>Proceed to Checkout</a>
-{% else %}
-  <p>Your cart is empty.</p>
-{% endif %}
+
+<style>
+.cart-wrapper {
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 16px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.cart-wrapper h2 {
+    margin-bottom: 15px;
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cart-table th,
+.cart-table td {
+    padding: 10px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    font-size: 14px;
+}
+
+.cart-table th {
+    background: #f3f4f6;
+}
+
+.cart-table img {
+    border-radius: 6px;
+}
+
+.total {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.cart-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.btn {
+    padding: 10px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+}
+
+.btn.primary {
+    background: #0b7285;
+    color: #fff;
+}
+
+.btn.secondary {
+    background: #e5e7eb;
+    color: #111;
+}
+
+.btn.danger {
+    color: #dc2626;
+    font-size: 13px;
+}
+</style>
+
+<div class="cart-wrapper">
+    <h2>Your Cart</h2>
+
+    {% if items %}
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for it in items %}
+                <tr>
+                    <td>
+                        {% if it.product.image %}
+                            <img src="{{ it.product.image.url }}" alt="{{ it.product.name }}" width="40" height="40">
+                        {% else %}
+                            <img src="{% static 'shop/images/placeholder.svg' %}" width="40" height="40">
+                        {% endif %}
+                        {{ it.product.name }}
+                    </td>
+
+                    <td>{{ it.qty }}</td>
+
+                    <td>₹ {{ it.subtotal }}</td>
+
+                    <td>
+                        <a class="btn danger" href="{% url 'cart_remove' it.product.id %}">
+                            Remove
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p class="total">Total: ₹ {{ total }}</p>
+
+        <div class="cart-actions">
+            <a class="btn secondary" href="{% url 'home' %}">
+                Continue Shopping
+            </a>
+
+            <a class="btn primary" href="{% url 'checkout' %}">
+                Proceed to Checkout
+            </a>
+        </div>
+
+    {% else %}
+        <p>Your cart is empty.</p>
+        <a class="btn primary" href="{% url 'home' %}">
+            Go to Home
+        </a>
+    {% endif %}
+</div>
+
 {% endblock %}

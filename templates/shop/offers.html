@@ -1,24 +1,24 @@
 {% extends "shop/base.html" %}
 {% load static %}
 
-{% block title %}Filtered Products{% endblock %}
+{% block title %}Special Offers{% endblock %}
 
 {% block content %}
 
 <div class="container">
 
-    <h1 style="margin-bottom:20px;">Filtered Products</h1>
+    <h1 style="margin-bottom:20px;">Special Offers</h1>
 
     {% if products %}
         <div class="product-grid">
             {% for product in products %}
                 <div class="product-card {% if not product.available %}out-of-stock{% endif %}">
 
-                    <a href="{% url 'product_detail' product.id %}">
+                    <a href="{% if product.available %}{% url 'product_detail' product.id %}{% else %}#{% endif %}">
                         {% if product.image %}
                             <img src="{{ product.image.url }}" alt="{{ product.name }}">
                         {% else %}
-                            <img src="{% static 'shop/images/placeholder.png' %}" alt="No image available">
+                            <img src="{% static 'shop/images/placeholder.png' %}" alt="No image">
                         {% endif %}
                     </a>
 
@@ -49,7 +49,7 @@
             {% endfor %}
         </div>
     {% else %}
-        <p>No products available with selected filters.</p>
+        <p>No offers available</p>
     {% endif %}
 
 </div>

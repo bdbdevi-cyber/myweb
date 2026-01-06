@@ -1,27 +1,23 @@
-
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import cloudinary
 
+# -------------------
+# Load environment variables
+# -------------------
 load_dotenv()
 
-
-
-
-
-
-
-# -------------------------------
+# -------------------
 # BASE DIR
-# -------------------------------
+# -------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# -------------------------------
+# -------------------
 # SECURITY
-# -------------------------------
-SECRET_KEY = 'replace-this-with-a-secure-key'
-DEBUG = False
+# -------------------
+SECRET_KEY = os.getenv("SECRET_KEY", "django_dummy_secret_key_12345")
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -30,139 +26,112 @@ ALLOWED_HOSTS = [
     ".onrender.com",
 ]
 
-
-# -------------------------------
-# CLOUDINARY CONFIG
-# -------------------------------
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUD_NAME'),
-    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
-}
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-
-# -------------------------------
-# APPS
-# -------------------------------
+# -------------------
+# INSTALLED APPS
+# -------------------
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-     # Cloudinary
-    'cloudinary',
-    'cloudinary_storage',
-    # Your app
-    'shop',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 
+    "cloudinary",
+    "cloudinary_storage",
 
+    "shop",
 ]
 
-
-# -------------------------------
+# -------------------
 # MIDDLEWARE
-# -------------------------------
+# -------------------
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-
-    # Whitenoise BEFORE SessionMiddleware
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+# -------------------
+# URL CONFIG
+# -------------------
+ROOT_URLCONF = "myshopp.urls"
 
-ROOT_URLCONF = 'myshopp.urls'
-
-
-# -------------------------------
+# -------------------
 # TEMPLATES
-# -------------------------------
+# -------------------
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'myshopp.wsgi.application'
+WSGI_APPLICATION = "myshopp.wsgi.application"
 
-
-
-# -------------------------------
+# -------------------
 # DATABASE
-# -------------------------------
+# -------------------
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
+# -------------------
+# CLOUDINARY CONFIG (✅ MOST IMPORTANT)
+# -------------------
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
+}
 
-AUTH_PASSWORD_VALIDATORS = []
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+)
 
-# -------------------------------
-# LANGUAGE & TIMEZONE
-# -------------------------------
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
-
-
-# -------------------------------
-# STATIC FILES (Render)
-# -------------------------------
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-
+# -------------------
+# STATIC FILES
+# -------------------
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+# -------------------
+# MEDIA
+# -------------------
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
-# -------------------------------
-# MEDIA (Cloudinary)
-# -------------------------------
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-
-# -------------------------------
-# LOGIN URL
-# -------------------------------
-LOGIN_URL = '/login/'
-
-
-# -------------------------------
-# RAZORPAY
-# -------------------------------
-RAZORPAY_KEY_ID = "rzp_test_xxx"
-RAZORPAY_KEY_SECRET = "rzp_test_secret"
-
-UPI_ID = "yourupi@bank"
-UPI_NAME = "My Shop"
-
-
+# -------------------
+# AUTH SETTINGS
+# -------------------
+LOGIN_URL = "/login/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# -------------------
+# RAZORPAY CONFIG
+# -------------------
+RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID")
+RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")

@@ -1,8 +1,16 @@
 {% extends 'shop/base.html' %}
+
 {% block content %}
-<div style="max-width:600px;margin:40px auto;text-align:center;">
-    <h2>Payment Failed</h2>
+<div style="max-width:600px; margin:40px auto; text-align:center; padding:20px; border-radius:12px; background:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+    <h2 style="color:#ff4d4f;">Payment Failed</h2>
     <p>Order #{{ order.id }} payment failed. Please try again or choose another payment method.</p>
-    <a href="{% url 'checkout' %}" style="display:inline-block;margin-top:12px;padding:10px 14px;border-radius:8px;background:#ff4d4f;color:#fff;text-decoration:none;">Try again</a>
+    
+    <a href="{% url 'checkout' %}" style="display:inline-block; margin-top:12px; padding:10px 14px; border-radius:8px; background:#ff4d4f; color:#fff; text-decoration:none; font-weight:600;">
+        Try Again
+    </a>
+
+    <p style="margin-top:15px; font-size:14px; color:#555;">
+        If the issue persists, please contact <a href="mailto:support@myshop.com" style="color:#0b6bda; text-decoration:underline;">support</a>.
+    </p>
 </div>
 {% endblock %}

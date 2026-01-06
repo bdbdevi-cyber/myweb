@@ -1,9 +1,17 @@
 {% extends 'shop/base.html' %}
+
 {% block content %}
-<div style="max-width:600px;margin:40px auto;text-align:center;">
-    <h2>Payment / Order Successful</h2>
-    <p>Your order #{{ order.id }} has been received.</p>
-    <p>Payment method: {{ order.payment_method }} — Status: {{ order.payment_status }}</p>
-    <a href="{% url 'home' %}" style="display:inline-block;margin-top:12px;padding:10px 14px;border-radius:8px;background:#0b75ff;color:#fff;text-decoration:none;">Continue Shopping</a>
+<div style="max-width:600px; margin:40px auto; text-align:center; padding:20px; border-radius:12px; background:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+    <h2 style="color:#28a745;">Payment / Order Successful</h2>
+    <p>Your order <strong>#{{ order.id }}</strong> has been received.</p>
+    <p>Payment method: <strong>{{ order.payment_method }}</strong> — Status: <strong>{{ order.payment_status }}</strong></p>
+
+    <a href="{% url 'home' %}" style="display:inline-block; margin-top:12px; padding:10px 14px; border-radius:8px; background:#0b75ff; color:#fff; text-decoration:none; font-weight:600;">
+        Continue Shopping
+    </a>
+
+    <p style="margin-top:15px; font-size:14px; color:#555;">
+        Need help? Contact <a href="mailto:support@myshop.com" style="color:#0b6bda; text-decoration:underline;">support</a>.
+    </p>
 </div>
 {% endblock %}

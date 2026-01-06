@@ -1,13 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from cloudinary.models import CloudinaryField
 
 
-# -----------------------
-# PROFILE MODEL
-# -----------------------
+# ================= PROFILE =================
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     phone = models.CharField(max_length=20, blank=True)
     address = models.TextField(blank=True)
 
@@ -15,36 +14,63 @@ class Profile(models.Model):
         return self.user.username
 
 
-# -----------------------
-# PRODUCT MODEL
-# -----------------------
+# ================= PRODUCT =================
 class Product(models.Model):
-    name = models.CharField(max_length=255)
-    category = models.CharField(max_length=255)
-    price = models.DecimalField(decimal_places=2, max_digits=10)
-    available = models.BooleanField(default=True)
-    # image = models.ImageField(upload_to='products/', blank=True, null=True)
-    image = models.ImageField(upload_to='products/')
+    CATEGORY_CHOICES = [
+    ("sarees", "Sarees"),
+    ("dress", "Dresses"),
+    ("offers", "Offers"),
+]
 
+    name = models.CharField(max_length=255)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    available = models.BooleanField(default=True)
+
+    image = CloudinaryField("image", blank=True, null=True)
     description = models.TextField(blank=True)
     show_on_homepage = models.BooleanField(default=True)
+    is_offer = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('product_detail', args=[self.id])
+        return reverse("product_detail", args=[self.id])
+
+    def in_stock(self):
+        return self.available
+
+    def stock_status(self):
+        return "In Stock" if self.available else "Out of Stock"
 
 
-# ===============================
-# ORDER MODEL (UPDATED FOR PAYMENT)
-# ===============================
+# ======= CART ITEM =======
+class CartItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    qty = models.PositiveIntegerField(default=1)
+
+    @property
+    def subtotal(self):
+        return self.qty * self.product.price
+
+    def __str__(self):
+        return f"{self.product.name} x {self.qty} ({self.user.username})"
+
+
+# ================= ORDER =================
 class Order(models.Model):
 
     PAYMENT_METHODS = [
         ("COD", "Cash on Delivery"),
-        ("RAZORPAY", "Razorpay Online Payment"),
-        ("UPI", "UPI Payment"),
+        ("RAZORPAY", "Razorpay"),
+        ("UPI", "UPI"),
     ]
 
     PAYMENT_STATUS = [
@@ -54,29 +80,46 @@ class Order(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     delivered = models.BooleanField(default=False)
     address = models.TextField(blank=True)
 
-    # 👇 new fields for payments
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHODS, default="COD")
     payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS, default="PENDING")
-    razorpay_order_id = models.CharField(max_length=200, blank=True)
-    razorpay_payment_id = models.CharField(max_length=200, blank=True)
-    razorpay_signature = models.CharField(max_length=200, blank=True)
+
+    razorpay_order_id = models.CharField(max_length=200, blank=True, null=True)
+    razorpay_payment_id = models.CharField(max_length=200, blank=True, null=True)
+    razorpay_signature = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return f"Order #{self.id} by {self.user.username}"
+        return f"Order #{self.id} - {self.user.username}"
+
+    def total_amount(self):
+        return sum(item.subtotal() for item in self.items.all())
 
 
-# -----------------------
-# ORDER ITEM MODEL
-# -----------------------
+# ================= ORDER ITEM =================
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
+    def subtotal(self):
+        return self.price * self.quantity
+
     def __str__(self):
-        return f"{self.quantity}x {self.product.name}"
+        return f"{self.quantity} x {self.product.name}"
+
+
+# ================= WISHLIST =================
+class Wishlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.product.name}"

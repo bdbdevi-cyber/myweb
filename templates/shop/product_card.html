@@ -1,0 +1,103 @@
+{% load static %}
+
+<div class="product-card">
+
+    <!-- ❤️ WISHLIST ICON -->
+    <div class="wishlist-icon">
+        {% if product.id in wishlist_items %}
+            <a href="{% url 'wishlist_remove' product.id %}" title="Remove from wishlist">
+                ❤️
+            </a>
+        {% else %}
+            <a href="{% url 'wishlist_add' product.id %}" title="Add to wishlist">
+                🤍
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- IMAGE -->
+    <a href="{% url 'product_detail' product.id %}">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-img">
+    </a>
+
+    <!-- PRODUCT INFO -->
+    <div class="product-info">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <p class="product-price">₹{{ product.price }}</p>
+
+        {% if product.is_offer %}
+            <span class="offer-badge">Offer</span>
+        {% endif %}
+    </div>
+
+    <!-- ADD TO CART -->
+    <div class="product-actions">
+        <a href="{% url 'cart_add' product.id %}" class="add-cart-btn">
+            Add to Cart
+        </a>
+    </div>
+
+</div>
+
+<style>
+.product-card {
+    position: relative;
+    background: #fff;
+    border-radius: 14px;
+    padding: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.product-img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.wishlist-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 22px;
+    z-index: 10;
+}
+
+.wishlist-icon a {
+    text-decoration: none;
+}
+
+.product-info {
+    margin-top: 10px;
+}
+
+.product-name {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.product-price {
+    font-size: 14px;
+    font-weight: bold;
+    color: #0b7285;
+}
+
+.offer-badge {
+    background: #ffefc2;
+    color: #9a6b00;
+    font-size: 11px;
+    padding: 3px 6px;
+    border-radius: 6px;
+}
+
+.add-cart-btn {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    border-radius: 10px;
+    background: #0b7285;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+}
+</style>

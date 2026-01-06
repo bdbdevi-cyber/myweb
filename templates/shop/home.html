@@ -4,28 +4,84 @@
 {% block title %}Home - My Shop{% endblock %}
 
 {% block content %}
-<h2>Products</h2>
-<section class="product-grid">
-  {% for p in products %}
-    <article class="product-card">
-      <a href="{% url 'product_detail' p.id %}">
-        {% if p.image %}
-          <img src="{{ p.image.url }}" alt="{{ p.name }}">
-        {% else %}
-          <img src="{% static 'shop/images/placeholder.svg' %}" alt="no image">
-        {% endif %}
-      </a>
-      <div class="meta">
-        <h3>{{ p.name }}</h3>
-        <p class="price">₹ {{ p.price }}</p>
-        <form action="{% url 'cart_add' p.id %}" method="post">
-          {% csrf_token %}
-          <button class="btn small">Add to cart</button>
-        </form>
-      </div>
-    </article>
-  {% empty %}
-    <p>No products found.</p>
-  {% endfor %}
-</section>
+
+<!-- ===== HOME BANNER ===== -->
+<div class="home-banner">
+    <img src="{% static 'shop/images/banner.svg' %}" alt="Home Banner">
+</div>
+
+<div class="container">
+    <h2>Products</h2>
+
+    <section class="product-grid">
+        {% for p in products %}
+        <article class="product-card {% if not p.available %}out-of-stock{% endif %}">
+
+            <!-- ❤️ WISHLIST ICON -->
+            <div class="wishlist-icon">
+                {% if user.is_authenticated %}
+                    {% if p.id in wishlist_items %}
+                        <a href="{% url 'wishlist_remove' p.id %}">❤️</a>
+                    {% else %}
+                        <a href="{% url 'wishlist_add' p.id %}">🤍</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'login' %}">🤍</a>
+                {% endif %}
+            </div>
+
+            <!-- PRODUCT IMAGE -->
+            <a href="{% if p.available %}{% url 'product_detail' p.id %}{% else %}#{% endif %}">
+                {% if p.image %}
+                    <img src="{{ p.image.url }}" alt="{{ p.name }}">
+                {% else %}
+                    <img src="{% static 'shop/images/placeholder.svg' %}" alt="No image">
+                {% endif %}
+            </a>
+
+            <div class="meta">
+                <h3>{{ p.name }}</h3>
+                <p class="price">₹ {{ p.price }}</p>
+
+                {% if p.available %}
+                    <p class="availability in-stock">In Stock</p>
+                {% else %}
+                    <p class="availability out-of-stock">Out of Stock</p>
+                {% endif %}
+
+                <p class="description">
+                    {{ p.description|truncatechars:60 }}
+                </p>
+
+                <form action="{% url 'cart_add' p.id %}" method="post">
+                    {% csrf_token %}
+                    <button {% if not p.available %}disabled{% endif %}>
+                        Add to Cart
+                    </button>
+                </form>
+            </div>
+
+        </article>
+        {% endfor %}
+    </section>
+</div>
+
+<style>
+.product-card{
+    position: relative;
+}
+
+.wishlist-icon{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 22px;
+    z-index: 10;
+}
+
+.wishlist-icon a{
+    text-decoration: none;
+}
+</style>
+
 {% endblock %}

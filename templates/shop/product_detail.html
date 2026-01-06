@@ -4,29 +4,30 @@
 {% block title %}{{ product.name }} - My Shop{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: center; align-items: center; min-height: 70vh; padding: 10px;">
-  <div class="product-detail" style="max-width: 600px; width: 100%; display: flex; gap: 20px; border: 1px solid #eee; border-radius: 10px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); background: #fff; font-size: 14px;">
-    <div class="left" style="flex: 1;">
-      {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: auto; border-radius: 8px; object-fit: cover;" />
-      {% else %}
-        <img src="{% static 'shop/images/placeholder.svg' %}" alt="No image" style="width: 100%; height: auto; border-radius: 8px; object-fit: contain;" />
-      {% endif %}
+<div class="product-detail-container">
+    <div class="product-detail-card {% if not product.available %}out-of-stock{% endif %}">
+        <div class="product-detail-left">
+            <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'shop/images/placeholder.svg' %}{% endif %}" 
+                 alt="{{ product.name }}" class="product-detail-image">
+        </div>
+        <div class="product-detail-right">
+            <h1 class="product-detail-name">{{ product.name }}</h1>
+            <p class="product-detail-price">₹ {{ product.price }}</p>
+            <p class="product-detail-description">{{ product.description }}</p>
+            <p class="product-detail-availability">
+                {% if product.available %}
+                    <span class="in-stock">&#10003; In Stock</span>
+                {% else %}
+                    <span class="out-of-stock">&#10007; Out of Stock</span>
+                {% endif %}
+            </p>
+            <form action="{% url 'cart_add' product.id %}" method="post">
+                {% csrf_token %}
+                <button class="btn-add-to-cart" {% if not product.available %}disabled{% endif %}>
+                    Add to Cart
+                </button>
+            </form>
+        </div>
     </div>
-    <div class="right" style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 8px;">
-      <h1 style="margin: 0; font-size: 18px; font-weight: 600;">{{ product.name }}</h1>
-      <p style="font-weight: 600; color: #0b7285; margin: 0;">₹ {{ product.price }}</p>
-      <p style="margin: 0;">{{ product.description }}</p>
-      <p style="margin: 0; font-weight: 500;">
-        Availability: {% if product.available %}<span style="color: green;">In stock</span>{% else %}<span style="color: red;">Out of stock</span>{% endif %}
-      </p>
-      <form action="{% url 'cart_add' product.id %}" method="post" style="margin-top: auto;">
-        {% csrf_token %}
-        <button class="btn primary" style="padding: 8px 16px; border-radius: 6px; font-size: 14px; cursor: pointer;">
-          Add to cart
-        </button>
-      </form>
-    </div>
-  </div>
 </div>
 {% endblock %}
