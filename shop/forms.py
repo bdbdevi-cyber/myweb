@@ -4,48 +4,54 @@ from .models import Profile
 
 
 
-class SignUpForm(forms.Form):
-    username = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'class':'form-control'}))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control'}))
-    phone = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'class':'form-control'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
-    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
-
-    # Password validation
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get('password')
-        confirm_password = cleaned_data.get('confirm_password')
-        if password != confirm_password:
-            raise forms.ValidationError("Passwords do not match")
-
-
-
-
-
-
+from django import forms
+from django.contrib.auth.models import User
 
 # -----------------------------
-# USER SIGNUP FORM
+# USER SIGNUP FORM (FINAL)
 # -----------------------------
-class SignupForm(forms.ModelForm):
-    phone = forms.CharField(max_length=15, required=True)
-    password = forms.CharField(widget=forms.PasswordInput)
-    confirm_password = forms.CharField(widget=forms.PasswordInput)
+class SignUpForm(forms.ModelForm):
+    phone = forms.CharField(
+        max_length=15,
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
 
     class Meta:
         model = User
         fields = ['username', 'email']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
 
-    # password matching validation
+    # Password validation
     def clean(self):
         cleaned_data = super().clean()
-        p1 = cleaned_data.get("password")
-        p2 = cleaned_data.get("confirm_password")
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
 
-        if p1 and p2 and p1 != p2:
-            raise forms.ValidationError("Both passwords must match")
+        if password and confirm_password and password != confirm_password:
+            raise forms.ValidationError("Passwords do not match")
+
         return cleaned_data
+
+    # Save user with hashed password
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
+
 
 
 # -----------------------------

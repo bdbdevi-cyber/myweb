@@ -29,6 +29,7 @@ class Product(models.Model):
 
     image = CloudinaryField("image", blank=True, null=True)
     description = models.TextField(blank=True)
+    details=models.TextField(blank=True)
     show_on_homepage = models.BooleanField(default=True)
     is_offer = models.BooleanField(default=False)
 
@@ -48,6 +49,15 @@ class Product(models.Model):
 
     def stock_status(self):
         return "In Stock" if self.available else "Out of Stock"
+    
+class ProductImage(models.Model):
+    product = models.ForeignKey(
+        Product,
+        related_name="images",
+        on_delete=models.CASCADE
+    )
+    image = models.ImageField(upload_to="product_images/")
+
 
 
 # ======= CART ITEM =======
@@ -123,3 +133,4 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.product.name}"
+

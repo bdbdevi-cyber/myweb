@@ -8,29 +8,34 @@
 <div class="container">
 
     <h2 class="section-title">
-        {{ category.name|default:"Products" }}
+        {{ category_name|default:"Products" }}
     </h2>
 
     <section class="product-grid">
         {% for p in products %}
             <article class="product-card {% if not p.available %}out-of-stock{% endif %}">
 
-                <!-- PRODUCT IMAGE -->
-                <a href="{% if p.available %}{% url 'product_detail' p.id %}{% else %}#{% endif %}">
+                <!-- PRODUCT IMAGE (CLICKABLE) -->
+                <div class="product-image" onclick="toggleGallery({{ p.id }})">
                     {% if p.image %}
                         <img src="{{ p.image.url }}" alt="{{ p.name }}">
                     {% else %}
                         <img src="{% static 'shop/images/placeholder.svg' %}" alt="No image">
                     {% endif %}
-                </a>
+                </div>
+
+                <!-- MULTIPLE IMAGES (HIDDEN BY DEFAULT) -->
+                <div class="image-gallery" id="gallery-{{ p.id }}" style="display:none;">
+                    {% for img in p.images.all %}
+                        <img src="{{ img.image.url }}" alt="extra image">
+                    {% empty %}
+                        <p class="no-extra">No extra images</p>
+                    {% endfor %}
+                </div>
 
                 <!-- PRODUCT INFO -->
                 <div class="meta">
                     <h3>{{ p.name }}</h3>
-
-                    <p class="description">
-                        {{ p.description|truncatechars:60|default:"No description available" }}
-                    </p>
 
                     <p class="price">₹ {{ p.price }}</p>
 
@@ -53,5 +58,17 @@
     </section>
 
 </div>
+
+<!-- JS FOR IMAGE TOGGLE -->
+<script>
+function toggleGallery(id) {
+    const gallery = document.getElementById("gallery-" + id);
+    if (gallery.style.display === "none") {
+        gallery.style.display = "flex";
+    } else {
+        gallery.style.display = "none";
+    }
+}
+</script>
 
 {% endblock %}

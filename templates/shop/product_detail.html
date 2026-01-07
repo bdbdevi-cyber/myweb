@@ -1,33 +1,77 @@
 {% extends 'shop/base.html' %}
 {% load static %}
 
-{% block title %}{{ product.name }} - My Shop{% endblock %}
-
 {% block content %}
-<div class="product-detail-container">
-    <div class="product-detail-card {% if not product.available %}out-of-stock{% endif %}">
-        <div class="product-detail-left">
-            <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'shop/images/placeholder.svg' %}{% endif %}" 
-                 alt="{{ product.name }}" class="product-detail-image">
-        </div>
-        <div class="product-detail-right">
-            <h1 class="product-detail-name">{{ product.name }}</h1>
-            <p class="product-detail-price">₹ {{ product.price }}</p>
-            <p class="product-detail-description">{{ product.description }}</p>
-            <p class="product-detail-availability">
-                {% if product.available %}
-                    <span class="in-stock">&#10003; In Stock</span>
-                {% else %}
-                    <span class="out-of-stock">&#10007; Out of Stock</span>
-                {% endif %}
-            </p>
-            <form action="{% url 'cart_add' product.id %}" method="post">
-                {% csrf_token %}
-                <button class="btn-add-to-cart" {% if not product.available %}disabled{% endif %}>
-                    Add to Cart
-                </button>
-            </form>
-        </div>
+
+<div class="pd-wrapper">
+
+  <!-- IMAGE CARD -->
+  <div class="pd-image-card">
+
+    <!-- MAIN IMAGE -->
+    <img id="mainImage"
+         src="{% if product.images.all %}
+                {{ product.images.first.image.url }}
+              {% else %}
+                {{ product.image.url }}
+              {% endif %}"
+         class="pd-main-image">
+
+    <!-- THUMBNAILS -->
+    <div class="pd-thumbnails">
+      {% if product.image %}
+        <img src="{{ product.image.url }}"
+             class="pd-thumb active"
+             onclick="changeImage(this)">
+      {% endif %}
+
+      {% for img in product.images.all %}
+        <img src="{{ img.image.url }}"
+             class="pd-thumb"
+             onclick="changeImage(this)">
+      {% endfor %}
     </div>
+
+  </div>
+
+  <!-- INFO CARD -->
+  <div class="pd-info-card">
+    <h2 class="pd-title">{{ product.name }}</h2>
+
+    <p class="pd-price">₹ {{ product.price }}</p>
+
+    {% if product.available %}
+      <p class="pd-stock in">✔ In Stock</p>
+    {% else %}
+      <p class="pd-stock out">✖ Out of Stock</p>
+    {% endif %}
+
+    <p class="pd-desc">{{ product.description }}</p>
+    <p class="pd-det">{{ product.details }}</p>
+
+    <div class="pd-buttons">
+
+  <form method="POST" action="{% url 'cart_add' product.id %}">
+    {% csrf_token %}
+    <button type="submit" class="pd-cart-btn">Add to Cart</button>
+  </form>
+
+  <form method="POST" action="{% url 'buy_now' product.id %}">
+    {% csrf_token %}
+    <button type="submit" class="pd-buy-btn">Buy Now</button>
+  </form>
+
 </div>
+
+
+</div>
+
+<script>
+function changeImage(el) {
+  document.getElementById("mainImage").src = el.src;
+  document.querySelectorAll(".pd-thumb").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
+}
+</script>
+
 {% endblock %}

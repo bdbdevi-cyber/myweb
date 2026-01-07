@@ -102,6 +102,8 @@ def product_detail(request, id):
     })
 
 
+
+
 # ---------------- CART ----------------
 @login_required
 def cart_view(request):
@@ -167,13 +169,19 @@ def wishlist_remove(request, id):
 def signup(request):
     form = SignUpForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
-        user = form.save(commit=False)
-        user.set_password(form.cleaned_data["password"])
-        user.save()
-        Profile.objects.create(user=user)
+        user = form.save()
+
+        Profile.objects.create(
+            user=user,
+            phone=form.cleaned_data["phone"]
+        )
+
         messages.success(request, "Account created. Please login.")
         return redirect("login")
+
     return render(request, "shop/signup.html", {"form": form})
+
+
 
 
 def login_view(request):
@@ -250,6 +258,8 @@ def offers_view(request):
 
 
 
+
+
 @login_required
 def checkout(request):
     cart = request.session.get('cart', {})
@@ -279,3 +289,15 @@ def checkout(request):
         "cart_count": get_cart_count(request),
         "wishlist_count": get_wishlist_count(request),
     })
+
+
+@login_required
+def buy_now(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    # Clear cart and add only this product
+    request.session['cart'] = {
+        str(product_id): 1
+    }
+
+    return redirect('checkout')   # ✅ IMPORTANT
