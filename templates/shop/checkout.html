@@ -4,7 +4,6 @@
 
 {% block content %}
 <style>
-/* (same styles as you had; kept concise) */
 .checkout-wrapper { max-width:480px; margin:20px auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 3px 12px rgba(0,0,0,0.08); }
 .checkout-wrapper h2 { text-align:center; margin-bottom:15px; font-size:22px; color:#333; }
 .form-label{ font-weight:600; margin:10px 0 5px; display:block; color:#444; }
@@ -25,11 +24,14 @@ textarea{ width:100%; border:1px solid #ccc; border-radius:8px; padding:10px; fo
 <div class="checkout-wrapper">
     <h2>Checkout</h2>
 
-    <form id="checkoutForm" method="post">
+    <form method="post">
         {% csrf_token %}
-        <label class="form-label">Delivery Address</label>
-        <textarea name="address" rows="3">{{ profile.address }}</textarea>
 
+        <!-- ADDRESS -->
+        <label class="form-label">Delivery Address</label>
+        <textarea name="address" rows="3" required>{{ profile.address }}</textarea>
+
+        <!-- ORDER SUMMARY -->
         <h3 style="margin-top:15px;">Order Summary</h3>
         <div class="items-box">
             <ul>
@@ -39,45 +41,53 @@ textarea{ width:100%; border:1px solid #ccc; border-radius:8px; padding:10px; fo
             </ul>
         </div>
 
-        <p class="total-price">Total: ₹ <span id="totalAmount">{{ total }}</span></p>
+        <p class="total-price">Total: ₹ {{ total }}</p>
 
+        <!-- PAYMENT METHOD -->
         <h3 style="margin-top:20px;">Select Payment Method</h3>
         <div class="payment-methods">
+
             <label class="payment-method">
-                <input type="radio" name="payment" value="cod" required> Cash on Delivery (COD)
+                <input type="radio" name="payment_method" value="COD" required>
+                Cash on Delivery (COD)
             </label>
 
             <label class="payment-method">
-                <input type="radio" name="payment" value="upi"> UPI (Google Pay / PhonePe / Paytm)
+                <input type="radio" name="payment_method" value="UPI">
+                UPI (Google Pay / PhonePe / Paytm)
             </label>
 
             <label class="payment-method">
-                <input type="radio" name="payment" value="card"> Debit / Credit Card (Razorpay)
+                <input type="radio" name="payment_method" value="RAZORPAY">
+                Debit / Credit Card (Razorpay)
             </label>
+
         </div>
 
-        <div id="upiNote" style="display:none;">
-            <p class="small-note">For UPI: you will get UPI ID & an instruction page to complete payment. After you pay, your order will be confirmed once we receive payment.</p>
-        </div>
+        <p class="small-note" id="upiNote" style="display:none;">
+            For UPI: order will be confirmed after payment verification.
+        </p>
 
-        <button id="placeBtn" class="place-order-btn" type="submit">Place Order</button>
+        <button class="place-order-btn" type="submit">
+            Place Order
+        </button>
     </form>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-    const form = document.getElementById('checkoutForm');
+    const radios = document.querySelectorAll('input[name="payment_method"]');
     const upiNote = document.getElementById('upiNote');
 
-    // show small note if UPI selected
-    form.addEventListener('change', (e) => {
-        const val = form.payment.value;
-        if(val === 'upi') upiNote.style.display = 'block';
-        else upiNote.style.display = 'none';
+    radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.value === 'UPI') {
+                upiNote.style.display = 'block';
+            } else {
+                upiNote.style.display = 'none';
+            }
+        });
     });
-
-    // For Razorpay we will let server create an order and return a page to open checkout,
-    // so default form submit is fine. If you prefer client-side initiation, we could call fetch to create order.
 });
 </script>
 

@@ -14,7 +14,23 @@ from .models import Product, Order, Profile, Wishlist
 from .forms import SignUpForm, UserProfileForm, ProfileForm
 
 
+from .models import Product, Order, OrderItem
+from .utils import get_cart_count, get_wishlist_count
+
+
 from shop.models import Product, CartItem
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from .models import Profile
+from .forms import SignUpForm
+
+
+from decimal import Decimal
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
+from .models import Product, Order, OrderItem
+from .utils import get_cart_count, get_wishlist_count
 
 @login_required
 def wishlist_buy_now(request, product_id):
@@ -166,20 +182,31 @@ def wishlist_remove(request, id):
 
 
 # ---------------- AUTH ----------------
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from .models import Profile
+from .forms import SignUpForm
+
+
 def signup(request):
     form = SignUpForm(request.POST or None)
+
     if request.method == "POST" and form.is_valid():
         user = form.save()
 
-        Profile.objects.create(
+        # ✅ SAFE PROFILE CREATION
+        Profile.objects.get_or_create(
             user=user,
-            phone=form.cleaned_data["phone"]
+            defaults={
+                "phone": form.cleaned_data.get("phone")
+            }
         )
 
-        messages.success(request, "Account created. Please login.")
+        messages.success(request, "Account created successfully. Please login.")
         return redirect("login")
 
     return render(request, "shop/signup.html", {"form": form})
+
 
 
 
@@ -260,6 +287,8 @@ def offers_view(request):
 
 
 
+
+
 @login_required
 def checkout(request):
     cart = request.session.get('cart', {})
@@ -282,6 +311,34 @@ def checkout(request):
 
     profile = request.user.profile
 
+    # ✅ IMPORTANT PART — PLACE ORDER
+    if request.method == "POST":
+        address = request.POST.get("address", "")
+        payment_method = request.POST.get("payment_method", "COD")
+
+        # 1️⃣ CREATE ORDER
+        order = Order.objects.create(
+            user=request.user,
+            address=address,
+            payment_method=payment_method,
+            payment_status="PENDING"
+        )
+
+        # 2️⃣ CREATE ORDER ITEMS
+        for item in items:
+            OrderItem.objects.create(
+                order=order,
+                product=item["product"],
+                quantity=item["qty"],
+                price=item["product"].price
+            )
+
+        # 3️⃣ CLEAR CART
+        request.session['cart'] = {}
+
+        messages.success(request, "Order placed successfully!")
+        return redirect("order_success")
+
     return render(request, "shop/checkout.html", {
         "items": items,
         "total": total,
@@ -289,6 +346,7 @@ def checkout(request):
         "cart_count": get_cart_count(request),
         "wishlist_count": get_wishlist_count(request),
     })
+
 
 
 @login_required
@@ -301,3 +359,13 @@ def buy_now(request, product_id):
     }
 
     return redirect('checkout')   # ✅ IMPORTANT
+
+
+
+
+@login_required
+def order_success(request):
+    # clear cart after order
+    request.session['cart'] = {}
+
+    return render(request, "shop/order_success.html")

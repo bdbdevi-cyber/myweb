@@ -38,6 +38,8 @@ urlpatterns = [
     path('checkout/', views.checkout, name='checkout'),
     path('wishlist/buy-now/<int:product_id>/', views.wishlist_buy_now, name='wishlist_buy_now'),
     path('buy-now/<int:product_id>/', views.buy_now, name='buy_now'),
+
+    path("order-success/", views.order_success, name="order_success"),
     
     
 
