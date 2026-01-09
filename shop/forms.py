@@ -1,39 +1,86 @@
 from django import forms
 from django.contrib.auth.models import User
+
+
 from .models import Profile
 
-
-
-from django import forms
-from django.contrib.auth.models import User
-
-# -----------------------------
-# USER SIGNUP FORM (FINAL)
-# -----------------------------
-class SignUpForm(forms.ModelForm):
-    phone = forms.CharField(
-        max_length=15,
-        required=True,
-        widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
-
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control'})
-    )
-
-    confirm_password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control'})
-    )
-
+class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email']
-        widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
-        }
 
-    # Password validation
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['phone', 'address']
+
+
+
+
+
+
+
+class SignupForm(forms.Form):
+    username = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Enter username"
+        })
+    )
+
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            "class": "form-control",
+            "placeholder": "Enter email"
+        })
+    )
+
+    phone = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Enter phone number"
+        })
+    )
+
+    address = forms.CharField(
+        widget=forms.Textarea(attrs={
+            "class": "form-control",
+            "rows": 3,
+            "placeholder": "Enter address"
+        })
+    )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            "class": "form-control",
+            "placeholder": "Enter password"
+        })
+    )
+
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            "class": "form-control",
+            "placeholder": "Confirm password"
+        })
+    )
+
+    # Validate username uniqueness
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Username already taken")
+        return username
+
+    # Validate email uniqueness
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Email already registered")
+        return email
+
+    # Validate password match
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
@@ -43,66 +90,3 @@ class SignUpForm(forms.ModelForm):
             raise forms.ValidationError("Passwords do not match")
 
         return cleaned_data
-
-    # Save user with hashed password
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.set_password(self.cleaned_data["password"])
-        if commit:
-            user.save()
-        return user
-
-
-
-# -----------------------------
-# USER PROFILE UPDATE FORM
-# -----------------------------
-class UserProfileForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['username', 'email']
-
-
-# -----------------------------
-# PROFILE MODEL UPDATE FORM
-# -----------------------------
-class ProfileForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ['phone', 'address']
-
-
-class UserProfileForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ["first_name", "last_name", "email"]
-        widgets = {
-            "first_name": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Enter first name"
-            }),
-            "last_name": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Enter last name"
-            }),
-            "email": forms.EmailInput(attrs={
-                "class": "form-control",
-                "placeholder": "Enter email address"
-            }),
-        }
-
-class ProfileForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ["phone", "address"]
-        widgets = {
-            "phone": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Enter phone number"
-            }),
-            "address": forms.Textarea(attrs={
-                "class": "form-control",
-                "rows": 3,
-                "placeholder": "Enter address"
-            }),
-        }

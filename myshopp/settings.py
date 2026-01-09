@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "cloudinary_storage",
 
     "shop",
+   'widget_tweaks',  # <--- add this line
 ]
 
 # -------------------

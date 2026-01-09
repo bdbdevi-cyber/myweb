@@ -158,7 +158,11 @@
 
         <div class="profile-dropdown" id="profileDropdown">
             {% if user.is_authenticated %}
-                <a href="{% url 'profile' %}"><i class="fa fa-user"></i> My Profile</a>
+               <a href="{% url 'profile' %}">
+    <i class="fa fa-user"></i> My Account
+</a>
+
+
                 <a href="{% url 'logout' %}"><i class="fa fa-right-from-bracket"></i> Logout</a>
             {% else %}
                 <a href="{% url 'login' %}"><i class="fa fa-right-to-bracket"></i> Login</a>

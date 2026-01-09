@@ -11,26 +11,120 @@ import razorpay
 from django.contrib.auth.models import User
 
 from .models import Product, Order, Profile, Wishlist
-from .forms import SignUpForm, UserProfileForm, ProfileForm
+from .forms import SignupForm
 
-
-from .models import Product, Order, OrderItem
-from .utils import get_cart_count, get_wishlist_count
-
-
-from shop.models import Product, CartItem
-from django.contrib import messages
-from django.shortcuts import redirect, render
-from .models import Profile
-from .forms import SignUpForm
-
-
-from decimal import Decimal
-from django.contrib import messages
-from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
-from .models import Product, Order, OrderItem
-from .utils import get_cart_count, get_wishlist_count
+from .models import Product
+from .utils import get_cart_count, get_wishlist_count  # make sure you have these
+
+from .models import Product, CartItem
+
+from django.contrib.auth.models import User
+from .forms import SignupForm
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from .forms import SignupForm
+from .models import Profile
+
+from .forms import UserForm, ProfileForm
+
+
+
+
+@login_required
+def my_profile(request):
+    user = request.user
+    profile, created = Profile.objects.get_or_create(user=user)
+
+    if request.method == "POST":
+        user_form = UserForm(request.POST, instance=user)
+        profile_form = ProfileForm(request.POST, instance=profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+
+            # ✅ SAVE ayyaka Profile Options ki vellali
+            return redirect('profile')
+
+    else:
+        user_form = UserForm(instance=user)
+        profile_form = ProfileForm(instance=profile)
+
+    return render(request, 'shop/profile.html', {
+        'user_form': user_form,
+        'profile_form': profile_form
+    })
+
+
+@login_required
+def profile_options(request):
+    return render(request, "shop/profile_options.html", {
+        "wishlist_count": get_wishlist_count(request),
+    })
+
+
+def login_view(request):
+    form = AuthenticationForm(request, data=request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        login(request, form.get_user())
+
+        # ✅ Login ayyaka direct ga Profile Options ki
+        return redirect("profile")
+
+    return render(request, "shop/login.html", {"form": form})
+
+
+
+
+
+
+
+
+
+
+
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("home")
+
+
+
+def signup_view(request):
+    form = SignupForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        username = form.cleaned_data["username"]
+        email = form.cleaned_data["email"]
+        phone = form.cleaned_data["phone"]
+        address = form.cleaned_data["address"]
+        password = form.cleaned_data["password"]
+
+        # Create User
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        # Update Profile created by signal
+        profile = user.profile  # signal already created profile
+        profile.phone = phone
+        profile.address = address
+        profile.save()
+
+        messages.success(request, "Account created successfully. Please login.")
+        return redirect("login")
+
+    return render(request, "shop/signup.html", {"form": form})
+
+
+
+
 
 @login_required
 def wishlist_buy_now(request, product_id):
@@ -47,8 +141,14 @@ def wishlist_buy_now(request, product_id):
         cart_item.qty += 1
         cart_item.save()
     
+    # Optional: update session cart if your checkout reads session
+    cart = request.session.get('cart', {})
+    cart[str(product_id)] = cart_item.qty
+    request.session['cart'] = cart
+    request.session.modified = True
+    
     # Redirect to checkout page
-    return redirect('checkout')
+    return redirect('checkout')  # ✅ No comma here
 
 
 
@@ -182,30 +282,6 @@ def wishlist_remove(request, id):
 
 
 # ---------------- AUTH ----------------
-from django.contrib import messages
-from django.shortcuts import redirect, render
-from .models import Profile
-from .forms import SignUpForm
-
-
-def signup(request):
-    form = SignUpForm(request.POST or None)
-
-    if request.method == "POST" and form.is_valid():
-        user = form.save()
-
-        # ✅ SAFE PROFILE CREATION
-        Profile.objects.get_or_create(
-            user=user,
-            defaults={
-                "phone": form.cleaned_data.get("phone")
-            }
-        )
-
-        messages.success(request, "Account created successfully. Please login.")
-        return redirect("login")
-
-    return render(request, "shop/signup.html", {"form": form})
 
 
 
@@ -225,34 +301,29 @@ def logout_view(request):
 
 
 # ---------------- PROFILE ----------------
-@login_required
-def profile_view(request):
-    profile = request.user.profile
+# @login_required
+# def profile_view(request):
+#     profile = request.user.profile
 
-    if request.method == "POST":
-        u_form = UserProfileForm(request.POST, instance=request.user)
-        p_form = ProfileForm(request.POST, instance=profile)
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request, "Profile updated successfully")
-            return redirect("profile")
-    else:
-        u_form = UserProfileForm(instance=request.user)
-        p_form = ProfileForm(instance=profile)
+#     if request.method == "POST":
+#         u_form = UserProfileForm(request.POST, instance=request.user)
+#         p_form = ProfileForm(request.POST, instance=profile)
+#         if u_form.is_valid() and p_form.is_valid():
+#             u_form.save()
+#             p_form.save()
+#             messages.success(request, "Profile updated successfully")
+#             return redirect("profile")
+#     else:
+#         u_form = UserProfileForm(instance=request.user)
+#         p_form = ProfileForm(instance=profile)
 
-    return render(request, "shop/profile.html", {
-        "u_form": u_form,
-        "p_form": p_form,
-        "wishlist_count": get_wishlist_count(request),
-    })
+#     return render(request, "shop/profile.html", {
+#         "u_form": u_form,
+#         "p_form": p_form,
+#         "wishlist_count": get_wishlist_count(request),
+#     })
 
 
-@login_required
-def profile_options(request):
-    return render(request, "shop/profile_options.html", {
-        "wishlist_count": get_wishlist_count(request),
-    })
 
 
 # ---------------- FILTERS ----------------
@@ -284,11 +355,7 @@ def offers_view(request):
     })
 
 
-
-
-
-
-
+# ================= CHECKOUT VIEW =================
 @login_required
 def checkout(request):
     cart = request.session.get('cart', {})
@@ -311,34 +378,6 @@ def checkout(request):
 
     profile = request.user.profile
 
-    # ✅ IMPORTANT PART — PLACE ORDER
-    if request.method == "POST":
-        address = request.POST.get("address", "")
-        payment_method = request.POST.get("payment_method", "COD")
-
-        # 1️⃣ CREATE ORDER
-        order = Order.objects.create(
-            user=request.user,
-            address=address,
-            payment_method=payment_method,
-            payment_status="PENDING"
-        )
-
-        # 2️⃣ CREATE ORDER ITEMS
-        for item in items:
-            OrderItem.objects.create(
-                order=order,
-                product=item["product"],
-                quantity=item["qty"],
-                price=item["product"].price
-            )
-
-        # 3️⃣ CLEAR CART
-        request.session['cart'] = {}
-
-        messages.success(request, "Order placed successfully!")
-        return redirect("order_success")
-
     return render(request, "shop/checkout.html", {
         "items": items,
         "total": total,
@@ -348,24 +387,71 @@ def checkout(request):
     })
 
 
-
+# ================= BUY NOW VIEW =================
 @login_required
 def buy_now(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
     # Clear cart and add only this product
-    request.session['cart'] = {
-        str(product_id): 1
-    }
+    request.session['cart'] = {str(product_id): 1}
+    request.session.modified = True  # ✅ Make sure session updates
 
-    return redirect('checkout')   # ✅ IMPORTANT
-
+    return redirect('checkout')  # This works because checkout reads from session
 
 
 
+
+
+# ---------------- RAZORPAY SUCCESS ----------------
+@csrf_exempt
 @login_required
-def order_success(request):
-    # clear cart after order
-    request.session['cart'] = {}
+def razorpay_success(request):
+    if request.method == "POST":
+        payment_id = request.POST.get("razorpay_payment_id")
+        order_id = request.POST.get("razorpay_order_id")
+        signature = request.POST.get("razorpay_signature")
+        order = get_object_or_404(Order, id=order_id, user=request.user)
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+        try:
+            client.utility.verify_payment_signature({
+                "razorpay_order_id": order_id,
+                "razorpay_payment_id": payment_id,
+                "razorpay_signature": signature,
+            })
+            order.payment_status = "PAID"
+            order.razorpay_payment_id = payment_id
+            order.save()
+            request.session['cart'] = {}
+            return redirect("payment_success", order_id=order.id)
+        except:
+            order.payment_status = "FAILED"
+            order.save()
+            return redirect("payment_failed", order_id=order.id)
+    return redirect("home")
 
-    return render(request, "shop/order_success.html")
+# ---------------- PAYMENT SUCCESS ----------------
+@login_required
+def payment_success(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    return render(request, "shop/payment_success.html", {"order": order})
+
+# ---------------- PAYMENT FAILED ----------------
+@login_required
+def payment_failed(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    return render(request, "shop/payment_failed.html", {"order": order})
+
+
+def product_card_view(request):
+    category = request.GET.get('category')  # fetch ?category=Sarees
+    if category:
+        products = Product.objects.filter(category__name=category)
+    else:
+        products = Product.objects.all()
+    return render(request, 'shop/product_card.html', {'products': products})
+
+
+from django.shortcuts import render
+
+def order_success(request):
+    return render(request, 'shop/order_success.html')

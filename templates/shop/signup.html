@@ -1,10 +1,15 @@
 {% extends "shop/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
 
 {% block title %}Sign Up - My Shop{% endblock %}
 
 {% block content %}
 <div class="card shadow p-4 mx-auto" style="max-width: 500px; margin-top: 50px; border-radius: 12px;">
     <h3 class="text-center mb-4">Create Your Account</h3>
+    <p class="text-center text-muted mb-4" style="font-size: 14px;">
+        Create your account in one step
+    </p>
 
     <form method="post" novalidate>
         {% csrf_token %}
@@ -12,46 +17,55 @@
         <!-- Username -->
         <div class="mb-3">
             {{ form.username.label_tag }}
-            {{ form.username }}
-            {% if form.username.errors %}
-                <div class="text-danger small">{{ form.username.errors }}</div>
-            {% endif %}
+            {{ form.username|add_class:"form-control" }}
+            {% for error in form.username.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
         </div>
 
         <!-- Email -->
         <div class="mb-3">
             {{ form.email.label_tag }}
-            {{ form.email }}
-            {% if form.email.errors %}
-                <div class="text-danger small">{{ form.email.errors }}</div>
-            {% endif %}
+            {{ form.email|add_class:"form-control" }}
+            {% for error in form.email.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
         </div>
 
         <!-- Phone -->
         <div class="mb-3">
             {{ form.phone.label_tag }}
-            {{ form.phone }}
-            {% if form.phone.errors %}
-                <div class="text-danger small">{{ form.phone.errors }}</div>
-            {% endif %}
+            {{ form.phone|add_class:"form-control" }}
+            {% for error in form.phone.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <!-- Address -->
+        <div class="mb-3">
+            {{ form.address.label_tag }}
+            {{ form.address|add_class:"form-control" }}
+            {% for error in form.address.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
         </div>
 
         <!-- Password -->
         <div class="mb-3">
             {{ form.password.label_tag }}
-            {{ form.password }}
-            {% if form.password.errors %}
-                <div class="text-danger small">{{ form.password.errors }}</div>
-            {% endif %}
+            {{ form.password|add_class:"form-control" }}
+            {% for error in form.password.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
         </div>
 
         <!-- Confirm Password -->
         <div class="mb-3">
             {{ form.confirm_password.label_tag }}
-            {{ form.confirm_password }}
-            {% if form.confirm_password.errors %}
-                <div class="text-danger small">{{ form.confirm_password.errors }}</div>
-            {% endif %}
+            {{ form.confirm_password|add_class:"form-control" }}
+            {% for error in form.confirm_password.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
         </div>
 
         <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>

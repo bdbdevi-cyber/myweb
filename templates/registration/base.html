@@ -5,13 +5,12 @@
     <meta charset="UTF-8">
     <title>{% block title %}My Shop{% endblock %}</title>
 
-    <!-- MAIN CSS -->
     <link rel="stylesheet" href="{% static 'shop/css/styles.css' %}">
 
     <style>
         body {
             margin: 0;
-            padding-bottom: 70px; /* space for bottom nav */
+            padding-bottom: 70px;
             font-family: Arial, sans-serif;
         }
 
@@ -61,14 +60,14 @@
             top: 0;
             z-index: 2000;
         }
-        .top-nav a {
-            position: relative;
+        .top-nav a, .top-nav span {
             text-decoration: none;
             color: #000;
             font-size: 16px;
-            margin: 0 5px;
+            cursor: pointer;
+            position: relative;
         }
-        .top-nav .badge {
+        .badge {
             position: absolute;
             top: -5px;
             right: -10px;
@@ -77,13 +76,6 @@
             border-radius: 50%;
             padding: 2px 6px;
             font-size: 12px;
-        }
-
-        /* ===== BANNER ===== */
-        .banner img {
-            width: 100%;
-            height: auto;
-            display: block;
         }
 
         /* ===== BOTTOM NAV ===== */
@@ -99,14 +91,7 @@
             box-shadow: 0 -2px 6px rgba(0,0,0,0.15);
             z-index: 3000;
         }
-        .bottom-nav a, .bottom-nav span {
-            text-decoration: none;
-            color: #000;
-            font-size: 16px;
-            cursor: pointer;
-        }
 
-        /* ===== FILTER DROPUP ===== */
         .filters-dropup {
             display: none;
             position: absolute;
@@ -127,9 +112,6 @@
             color: #000;
             text-decoration: none;
         }
-        .filters-dropup a:hover {
-            background: #f1f5ff;
-        }
     </style>
 </head>
 
@@ -141,11 +123,19 @@
         <h3>Select Option</h3>
 
         {% if user.is_authenticated %}
-            <a href="{% url 'profile' %}"><button class="popup-btn existing-btn">My Profile</button></a>
-            <a href="{% url 'logout' %}"><button class="popup-btn new-btn">Logout</button></a>
+            <a href="{% url 'profile' %}">
+                <button class="popup-btn existing-btn">My Account</button>
+            </a>
+            <a href="{% url 'logout' %}">
+                <button class="popup-btn new-btn">Logout</button>
+            </a>
         {% else %}
-            <a href="{% url 'login' %}"><button class="popup-btn existing-btn">Existing User</button></a>
-            <a href="{% url 'signup' %}"><button class="popup-btn new-btn">New User</button></a>
+            <a href="{% url 'login' %}">
+                <button class="popup-btn existing-btn">Existing User</button>
+            </a>
+            <a href="{% url 'signup' %}">
+                <button class="popup-btn new-btn">New User</button>
+            </a>
         {% endif %}
 
         <button class="popup-btn close-btn" onclick="closeProfilePopup()">Close</button>
@@ -158,6 +148,7 @@
     <a href="{% url 'category' 'sarees' %}">🧣 Sarees</a>
     <a href="{% url 'category' 'dress' %}">👗 Dresses</a>
     <span onclick="toggleFilters()">🔍 Filters</span>
+    <span onclick="openProfilePopup()">👤 Profile</span>
 
     {% if user.is_authenticated %}
         <a href="{% url 'wishlist' %}">
@@ -173,13 +164,6 @@
     {% endif %}
 </nav>
 
-<!-- ===== BANNER (HOME ONLY) ===== -->
-{% if request.resolver_match.url_name == 'home' %}
-<div class="home-banner">
-    <img src="{% static 'shop/images/sareeeeees.jpg' %}" alt="Banner">
-</div>
-{% endif %}
-
 <!-- ===== MAIN CONTENT ===== -->
 <main class="container">
     {% block content %}{% endblock %}
@@ -191,6 +175,7 @@
     <a href="{% url 'category' 'sarees' %}">🧣 Sarees</a>
     <a href="{% url 'category' 'dress' %}">👗 Dresses</a>
     <span onclick="toggleFilters()">🔍 Filters</span>
+    <span onclick="openProfilePopup()">👤 Profile</span>
 
     <div class="filters-dropup" id="filtersDropup">
         <a href="{% url 'filters' %}?order=price_asc">Price Low → High</a>
@@ -207,7 +192,7 @@
     }
     function toggleFilters() {
         const f = document.getElementById('filtersDropup');
-        f.style.display = (f.style.display === 'block') ? 'none' : 'block';
+        f.style.display = f.style.display === 'block' ? 'none' : 'block';
     }
 </script>
 

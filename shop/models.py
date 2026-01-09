@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 from cloudinary.models import CloudinaryField
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # ================= PROFILE =================
 class Profile(models.Model):
@@ -14,25 +15,34 @@ class Profile(models.Model):
         return self.user.username
 
 
+# ===== SIGNALS: AUTO CREATE / SAVE PROFILE =====
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+
 # ================= PRODUCT =================
 class Product(models.Model):
     CATEGORY_CHOICES = [
-    ("sarees", "Sarees"),
-    ("dress", "Dresses"),
-    ("offers", "Offers"),
-]
+        ("sarees", "Sarees"),
+        ("dress", "Dresses"),
+        ("offers", "Offers"),
+    ]
 
     name = models.CharField(max_length=255)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     available = models.BooleanField(default=True)
-
     image = CloudinaryField("image", blank=True, null=True)
     description = models.TextField(blank=True)
-    details=models.TextField(blank=True)
+    details = models.TextField(blank=True)
     show_on_homepage = models.BooleanField(default=True)
     is_offer = models.BooleanField(default=False)
-
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -50,14 +60,10 @@ class Product(models.Model):
     def stock_status(self):
         return "In Stock" if self.available else "Out of Stock"
     
-class ProductImage(models.Model):
-    product = models.ForeignKey(
-        Product,
-        related_name="images",
-        on_delete=models.CASCADE
-    )
-    image = models.ImageField(upload_to="product_images/")
 
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, related_name="images", on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="product_images/")
 
 
 # ======= CART ITEM =======
@@ -76,7 +82,6 @@ class CartItem(models.Model):
 
 # ================= ORDER =================
 class Order(models.Model):
-
     PAYMENT_METHODS = [
         ("COD", "Cash on Delivery"),
         ("RAZORPAY", "Razorpay"),
@@ -133,4 +138,3 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.product.name}"
-
