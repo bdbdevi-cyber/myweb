@@ -1,0 +1,39 @@
+{% extends "shop/base.html" %}
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+<div style="max-width:900px;margin:auto;padding:20px;">
+
+  <h2>📦 My Orders</h2>
+
+  {% if orders %}
+    {% for order in orders %}
+      <div style="border:1px solid #ddd;padding:15px;margin-bottom:20px;border-radius:12px;">
+
+        <h4>Order #{{ order.id }}</h4>
+        <p><b>Date:</b> {{ order.created_at|date:"d M Y" }}</p>
+        <p><b>Payment:</b> {{ order.payment_method }} ({{ order.payment_status }})</p>
+        <p><b>Delivered:</b> {{ order.delivered|yesno:"Yes,No" }}</p>
+        <p><b>Address:</b> {{ order.address }}</p>
+
+        <hr>
+
+        <ul>
+          {% for item in order.items.all %}
+            <li>
+              {{ item.product.name }} × {{ item.quantity }}  
+              — ₹{{ item.subtotal }}
+            </li>
+          {% endfor %}
+        </ul>
+
+        <p><b>Total:</b> ₹{{ order.total_amount }}</p>
+
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No orders yet.</p>
+  {% endif %}
+
+</div>
+{% endblock %}

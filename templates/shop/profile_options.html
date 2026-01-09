@@ -17,11 +17,12 @@
         </a>
 
         <!-- ORDERS (COMING SOON) -->
-        <a href="#" class="profile-card disabled">
-            <i class="fa fa-box"></i>
-            <span>My Orders</span>
-            <small>Coming soon</small>
-        </a>
+         <a href="{% url 'my_orders' %}" class="profile-card">
+             <i class="fa fa-box"></i>
+             <span>My Orders</span>
+      </a>
+
+       
 
         <!-- WISHLIST -->
         <a href="{% url 'wishlist' %}" class="profile-card">
@@ -30,11 +31,12 @@
         </a>
 
         <!-- ADDRESS (COMING SOON) -->
-        <a href="#" class="profile-card disabled">
-            <i class="fa fa-location-dot"></i>
-            <span>My Address</span>
-            <small>Coming soon</small>
-        </a>
+        
+           <a href="{% url 'my_address' %}" class="profile-card">
+             <i class="fa fa-location-dot"></i>
+             <span>My Address</span>
+           </a>
+
 
         <!-- LOGOUT -->
         <a href="{% url 'logout' %}" class="profile-card logout">

@@ -23,7 +23,17 @@
                         <img src="{% static 'shop/images/placeholder.svg' %}" alt="No image">
                     {% endif %}
                 </div>
-
+                 <div class="wishlist-icon">
+                {% if user.is_authenticated %}
+                    {% if p.id in wishlist_items %}
+                        <a href="{% url 'wishlist_remove' p.id %}">❤️</a>
+                    {% else %}
+                        <a href="{% url 'wishlist_add' p.id %}">🤍</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'login' %}">🤍</a>
+                {% endif %}
+            </div>
                 <!-- MULTIPLE IMAGES (HIDDEN BY DEFAULT) -->
                 <div class="image-gallery" id="gallery-{{ p.id }}" style="display:none;">
                     {% for img in p.images.all %}

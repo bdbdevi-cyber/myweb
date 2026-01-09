@@ -1,0 +1,15 @@
+{% extends "shop/base.html" %}
+{% block title %}My Address{% endblock %}
+
+{% block content %}
+<div style="max-width:600px;margin:auto;padding:20px;">
+  <h2>📍 My Address</h2>
+
+  {% if profile.address %}
+    <p>{{ profile.address }}</p>
+  {% else %}
+    <p>No address saved yet.</p>
+    <a href="{% url 'my_profile' %}">Add Address</a>
+  {% endif %}
+</div>
+{% endblock %}

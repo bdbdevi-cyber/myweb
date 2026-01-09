@@ -22,6 +22,19 @@
                         {% endif %}
                     </a>
 
+                    <div class="wishlist-icon">
+    {% if user.is_authenticated %}
+        {% if product.id in wishlist_items %}
+            <a href="{% url 'wishlist_remove' product.id %}" style="color:red;">❤️</a>
+        {% else %}
+            <a href="{% url 'wishlist_add' product.id %}">🤍</a>
+        {% endif %}
+    {% else %}
+        <a href="{% url 'login' %}">🤍</a>
+    {% endif %}
+</div>
+
+
                     <div class="meta">
                         <h3>{{ product.name }}</h3>
                         <p class="price">₹ {{ product.price }}</p>

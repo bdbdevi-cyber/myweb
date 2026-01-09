@@ -28,7 +28,25 @@ from .forms import SignupForm
 from .models import Profile
 
 from .forms import UserForm, ProfileForm
+from .models import Order, OrderItem
 
+
+
+
+
+@login_required
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user).order_by("-created_at")
+    return render(request, "shop/my_orders.html", {
+        "orders": orders
+    })
+
+@login_required
+def my_address(request):
+    profile = request.user.profile
+    return render(request, "shop/my_address.html", {
+        "profile": profile
+    })
 
 
 
@@ -377,6 +395,35 @@ def checkout(request):
         total += subtotal
 
     profile = request.user.profile
+
+    # 🔴 🔴 🔴 MAIN FIX STARTS HERE
+    if request.method == "POST":
+        address = request.POST.get("address", profile.address)
+        payment_method = request.POST.get("payment_method", "COD")
+
+        # ✅ CREATE ORDER
+        order = Order.objects.create(
+            user=request.user,
+            address=address,
+            payment_method=payment_method,
+            payment_status="PENDING"
+        )
+
+        # ✅ CREATE ORDER ITEMS
+        for item in items:
+            OrderItem.objects.create(
+                order=order,
+                product=item["product"],
+                quantity=item["qty"],
+                price=item["product"].price
+            )
+
+        # ✅ CLEAR CART
+        request.session["cart"] = {}
+
+        messages.success(request, "Order placed successfully!")
+        return redirect("order_success")
+    # 🔴 🔴 🔴 MAIN FIX ENDS HERE
 
     return render(request, "shop/checkout.html", {
         "items": items,

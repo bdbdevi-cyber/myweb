@@ -47,8 +47,9 @@ textarea{ width:100%; border:1px solid #ccc; border-radius:8px; padding:10px; fo
         <h3 style="margin-top:20px;">Select Payment Method</h3>
         <div class="payment-methods">
 
+            <!-- 🔧 COD DEFAULT SELECTED -->
             <label class="payment-method">
-                <input type="radio" name="payment_method" value="COD" required>
+                <input type="radio" name="payment_method" value="COD" checked>
                 Cash on Delivery (COD)
             </label>
 
@@ -64,8 +65,13 @@ textarea{ width:100%; border:1px solid #ccc; border-radius:8px; padding:10px; fo
 
         </div>
 
+        <!-- 🔧 INFO NOTES -->
         <p class="small-note" id="upiNote" style="display:none;">
             For UPI: order will be confirmed after payment verification.
+        </p>
+
+        <p class="small-note" id="razorpayNote" style="display:none;">
+            You will be redirected to Razorpay payment gateway.
         </p>
 
         <button class="place-order-btn" type="submit">
@@ -78,13 +84,18 @@ textarea{ width:100%; border:1px solid #ccc; border-radius:8px; padding:10px; fo
 document.addEventListener('DOMContentLoaded', function(){
     const radios = document.querySelectorAll('input[name="payment_method"]');
     const upiNote = document.getElementById('upiNote');
+    const razorpayNote = document.getElementById('razorpayNote');
 
     radios.forEach(radio => {
         radio.addEventListener('change', () => {
+            upiNote.style.display = "none";
+            razorpayNote.style.display = "none";
+
             if (radio.value === 'UPI') {
                 upiNote.style.display = 'block';
-            } else {
-                upiNote.style.display = 'none';
+            }
+            if (radio.value === 'RAZORPAY') {
+                razorpayNote.style.display = 'block';
             }
         });
     });
