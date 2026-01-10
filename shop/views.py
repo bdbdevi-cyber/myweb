@@ -547,7 +547,7 @@ def order_success(request):
 def upi_instructions(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
 
-    upi_id = "yourupi@upi"   # 🔥 YOUR REAL UPI ID
+    upi_id = "9032916659-2@ybl"   # 🔥 YOUR REAL UPI ID
     name = "My Shop"
     amount = order.get_total_amount()
 
