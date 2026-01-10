@@ -109,8 +109,20 @@ class Order(models.Model):
     def __str__(self):
         return f"Order #{self.id} - {self.user.username}"
 
+    # Already existing method (untouched)
     def total_amount(self):
         return sum(item.subtotal() for item in self.items.all())
+
+    # ✅ Safe get_total_amount method (updated & working)
+    def get_total_amount(self):
+        """
+        Returns total amount of the order.
+        Uses 'items' related_name from OrderItem model.
+        """
+        total = 0
+        for item in self.items.all():  # related_name="items" use chesthunnam
+            total += item.subtotal()    # item.price * item.quantity
+        return total
 
 
 # ================= ORDER ITEM =================
@@ -125,6 +137,7 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
+
 
 
 # ================= WISHLIST =================

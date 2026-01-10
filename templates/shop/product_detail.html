@@ -8,29 +8,26 @@
   <!-- IMAGE CARD -->
   <div class="pd-image-card">
 
-    <!-- MAIN IMAGE -->
-    <img id="mainImage"
-         src="{% if product.images.all %}
-                {{ product.images.first.image.url }}
-              {% else %}
-                {{ product.image.url }}
-              {% endif %}"
-         class="pd-main-image">
+    <!-- Main Image -->
+    <img id="mainProductImage" src="{{ product.image.url }}" alt="{{ product.name }}" style="width:400px;height:auto;">
 
-    <!-- THUMBNAILS -->
-    <div class="pd-thumbnails">
-      {% if product.image %}
-        <img src="{{ product.image.url }}"
-             class="pd-thumb active"
-             onclick="changeImage(this)">
-      {% endif %}
+    <!-- Thumbnails -->
+<div class="thumbnail-images" style="display:flex; gap:10px; margin-top:10px;">
+  <!-- Main image as first thumbnail -->
+  {% if product.image %}
+    <img src="{{ product.image.url }}"
+         class="pd-thumb active"
+         onclick="changeImage(this)">
+  {% endif %}
 
-      {% for img in product.images.all %}
-        <img src="{{ img.image.url }}"
-             class="pd-thumb"
-             onclick="changeImage(this)">
-      {% endfor %}
-    </div>
+  <!-- Extra images -->
+  {% for img in product.images.all %}
+    <img src="{{ img.image.url }}"
+         class="pd-thumb"
+         onclick="changeImage(this)">
+  {% endfor %}
+</div>
+
 
   </div>
 
@@ -51,27 +48,34 @@
 
     <div class="pd-buttons">
 
-  <form method="POST" action="{% url 'cart_add' product.id %}">
-    {% csrf_token %}
-    <button type="submit" class="pd-cart-btn">Add to Cart</button>
-  </form>
+      <form method="POST" action="{% url 'cart_add' product.id %}">
+        {% csrf_token %}
+        <button type="submit" class="pd-cart-btn">Add to Cart</button>
+      </form>
 
-  <form method="POST" action="{% url 'buy_now' product.id %}">
-    {% csrf_token %}
-    <button type="submit" class="pd-buy-btn">Buy Now</button>
-  </form>
+      <form method="POST" action="{% url 'buy_now' product.id %}">
+        {% csrf_token %}
+        <button type="submit" class="pd-buy-btn">Buy Now</button>
+      </form>
+
+    </div>
+  </div>
 
 </div>
 
-
-</div>
-
+<!-- JS FOR THUMBNAIL CLICK -->
 <script>
 function changeImage(el) {
-  document.getElementById("mainImage").src = el.src;
-  document.querySelectorAll(".pd-thumb").forEach(t => t.classList.remove("active"));
-  el.classList.add("active");
+    // Update main image
+    document.getElementById("mainProductImage").src = el.src;
+
+    // Remove active class from all thumbnails
+    document.querySelectorAll(".pd-thumb").forEach(t => t.classList.remove("active"));
+
+    // Add active class to clicked thumbnail
+    el.classList.add("active");
 }
 </script>
+
 
 {% endblock %}

@@ -1426,3 +1426,18 @@ body {
   background: #ff7a00;
   color: #fff;
 }
+
+
+
+
+.pd-thumb {
+  border: 2px solid transparent;
+  cursor: pointer;
+  width: 80px;
+  transition: border 0.2s;
+}
+
+.pd-thumb.active {
+  border: 2px solid #0b7285; /* Primary color highlight */
+  border-radius: 5px;
+}

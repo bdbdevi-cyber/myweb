@@ -35,13 +35,22 @@ urlpatterns = [
     path('filters/', views.filters_view, name='filters'),
     path('offers/', views.offers_view, name='offers'),
 
-    # ORDER
+    # ORDER & PAYMENT
     path('checkout/', views.checkout, name='checkout'),
     path('wishlist/buy-now/<int:product_id>/', views.wishlist_buy_now, name='wishlist_buy_now'),
     path('buy-now/<int:product_id>/', views.buy_now, name='buy_now'),
     path("order-success/", views.order_success, name="order_success"),
     path("my-orders/", views.my_orders, name="my_orders"),
     path("my-address/", views.my_address, name="my_address"),
+
+    # ================= PAYMENT =================
+    path("razorpay-success/", views.razorpay_success, name="razorpay_success"),
+    path("payment-success/<int:order_id>/", views.payment_success, name="payment_success"),
+    path("payment-failed/<int:order_id>/", views.payment_failed, name="payment_failed"),
+    path("upi-instructions/<int:order_id>/", views.upi_instructions, name="upi_instructions"),
+    path("upi-paid/<int:order_id>/", views.upi_payment_done, name="upi_payment_done"),
+
+    
 
 
 ]

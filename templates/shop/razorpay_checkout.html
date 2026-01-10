@@ -1,30 +1,14 @@
 {% extends 'shop/base.html' %}
+
 {% block title %}Pay with Razorpay{% endblock %}
+
 {% block content %}
-<div style="max-width:480px;margin:40px auto;text-align:center;">
+<div style="max-width:480px; margin:40px auto; text-align:center; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1);">
     <h2>Pay ₹{{ total }}</h2>
     <p>Redirecting to secure payment...</p>
     <p>If nothing happens, click the button below.</p>
 
-    <button id="rzpButton" style="padding:10px 16px;border-radius:8px;background:#007bff;color:#fff;border:none;cursor:pointer;">Pay Now</button>
-
-    <form id="rzpForm" method="post" action="{% url 'razorpay_success' %}">
-        {% csrf_token %}
-        <!-- these hidden fields will be filled by JS upon success and posted to server for verification -->
-        <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
-        <input type="hidden" name="razorpay_order_id" id="razorpay_order_id_field">
-        <input type="hidden" name="razorpay_signature" id="razorpay_signature">
-    </form>
-</div>{% extends 'shop/base.html' %}
-{% block title %}Pay with Razorpay{% endblock %}
-
-{% block content %}
-<div style="max-width:480px;margin:40px auto;text-align:center;background:#fff;padding:25px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1);">
-    <h2>Pay ₹{{ total }}</h2>
-    <p>Redirecting to secure payment...</p>
-    <p>If nothing happens, click the button below.</p>
-
-    <button id="rzpButton" style="padding:10px 16px;border-radius:8px;background:#007bff;color:#fff;border:none;cursor:pointer;font-size:16px;margin-top:10px;">
+    <button id="rzpButton" style="padding:10px 16px; border-radius:8px; background:#007bff; color:#fff; border:none; cursor:pointer; font-size:16px; margin-top:10px;">
         Pay Now
     </button>
 
@@ -36,75 +20,43 @@
     </form>
 </div>
 
+<!-- Razorpay Checkout JS -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const options = {
-        key: "{{ razorpay_key_id }}",
-        amount: "{{ amount_paise }}",
-        currency: "INR",
+        key: "{{ razorpay_merchant_key }}",  // Correct key variable from view
+        amount: {{ amount }},                // Amount in paise
+        currency: "{{ currency }}",
         name: "My Shop",
         description: "Order #{{ order.id }}",
         order_id: "{{ razorpay_order_id }}",
-        handler: function (response) {
+        handler: function(response) {
+            // Fill hidden form inputs
             document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
             document.getElementById('razorpay_order_id_field').value = response.razorpay_order_id;
             document.getElementById('razorpay_signature').value = response.razorpay_signature;
+
+            // Submit form to server
             document.getElementById('rzpForm').submit();
         },
         prefill: {
-            name: "{{ user_name }}",
-            email: "{{ user_email }}"
+            name: "{{ request.user.username }}",
+            email: "{{ request.user.email }}"
         },
         theme: { color: "#0b75ff" }
     };
 
     const rzp = new Razorpay(options);
 
-    // Manual pay button
+    // Manual pay button click
     document.getElementById('rzpButton').addEventListener('click', function(e) {
         rzp.open();
         e.preventDefault();
     });
 
-    // Auto open Razorpay on page load
+    // Auto open Razorpay popup on page load
     rzp.open();
 });
-</script>
-{% endblock %}
-
-
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script>
-const options = {
-    "key": "{{ razorpay_key_id }}",
-    "amount": "{{ amount_paise }}",
-    "currency": "INR",
-    "name": "My Shop",
-    "description": "Order #{{ order.id }}",
-    "order_id": "{{ razorpay_order_id }}",
-    "handler": function (response){
-        // response has razorpay_payment_id, razorpay_order_id, razorpay_signature
-        document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
-        document.getElementById('razorpay_order_id_field').value = response.razorpay_order_id;
-        document.getElementById('razorpay_signature').value = response.razorpay_signature;
-        // submit form to server to verify signature & finalize order
-        document.getElementById('rzpForm').submit();
-    },
-    "prefill": {
-        "name": "{{ user_name }}",
-        "email": "{{ user_email }}"
-    },
-    "theme": { "color": "#0b75ff" }
-};
-
-const rzp = new Razorpay(options);
-document.getElementById('rzpButton').addEventListener('click', function(e){
-    rzp.open();
-    e.preventDefault();
-});
-
-// auto open
-window.onload = function(){ rzp.open(); };
 </script>
 {% endblock %}

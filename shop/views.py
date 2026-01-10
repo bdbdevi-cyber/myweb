@@ -211,6 +211,7 @@ def category_view(request, category_name):
 
     db_category = CATEGORY_MAP.get(category_name.lower())
 
+    # Fetch products
     products = Product.objects.filter(category__iexact=db_category) if db_category else Product.objects.none()
 
     return render(request, 'shop/category.html', {
@@ -227,13 +228,16 @@ def category_view(request, category_name):
 # ---------------- PRODUCT DETAIL ----------------
 def product_detail(request, id):
     product = get_object_or_404(Product, id=id, available=True)
+    images = product.images.all()  # all related images
 
     return render(request, 'shop/product_detail.html', {
         'product': product,
+        'images': images,
         'cart_count': get_cart_count(request),
         'wishlist_items': get_wishlist_items(request),
         'wishlist_count': get_wishlist_count(request),
     })
+
 
 
 
@@ -358,7 +362,9 @@ def filters_view(request):
         'products': products,
         'cart_count': get_cart_count(request),
         'wishlist_count': get_wishlist_count(request),
+        'wishlist_items': get_wishlist_items(request),  # ✅ ONLY THIS LINE ADDED
     })
+
 
 
 # ---------------- OFFERS ----------------
@@ -373,7 +379,17 @@ def offers_view(request):
     })
 
 
+
+# Initialize Razorpay client
+client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
 # ================= CHECKOUT VIEW =================
+# ================= CHECKOUT VIEW =================
+from decimal import Decimal
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
 @login_required
 def checkout(request):
     cart = request.session.get('cart', {})
@@ -396,12 +412,11 @@ def checkout(request):
 
     profile = request.user.profile
 
-    # 🔴 🔴 🔴 MAIN FIX STARTS HERE
     if request.method == "POST":
         address = request.POST.get("address", profile.address)
         payment_method = request.POST.get("payment_method", "COD")
 
-        # ✅ CREATE ORDER
+        # ✅ 1. CREATE ORDER
         order = Order.objects.create(
             user=request.user,
             address=address,
@@ -409,7 +424,7 @@ def checkout(request):
             payment_status="PENDING"
         )
 
-        # ✅ CREATE ORDER ITEMS
+        # ✅ 2. CREATE ORDER ITEMS
         for item in items:
             OrderItem.objects.create(
                 order=order,
@@ -418,12 +433,22 @@ def checkout(request):
                 price=item["product"].price
             )
 
-        # ✅ CLEAR CART
+        # ✅ 3. CLEAR CART
         request.session["cart"] = {}
 
-        messages.success(request, "Order placed successfully!")
-        return redirect("order_success")
-    # 🔴 🔴 🔴 MAIN FIX ENDS HERE
+        # ✅ 4. PAYMENT REDIRECTION (MAIN FIX)
+        if payment_method == "UPI":
+            # 🔥 UPI instructions page
+            return redirect("upi_instructions", order_id=order.id)
+
+        elif payment_method == "RAZORPAY":
+            # 🔥 Razorpay flow
+            return redirect("razorpay_payment", order_id=order.id)
+
+        else:
+            # 🔥 COD
+            messages.success(request, "Order placed successfully! Payment on delivery.")
+            return redirect("order_success")
 
     return render(request, "shop/checkout.html", {
         "items": items,
@@ -455,34 +480,49 @@ def buy_now(request, product_id):
 def razorpay_success(request):
     if request.method == "POST":
         payment_id = request.POST.get("razorpay_payment_id")
-        order_id = request.POST.get("razorpay_order_id")
+        razorpay_order_id = request.POST.get("razorpay_order_id")
         signature = request.POST.get("razorpay_signature")
-        order = get_object_or_404(Order, id=order_id, user=request.user)
+
+        # Fetch the order
+        order = get_object_or_404(Order, razorpay_order_id=razorpay_order_id, user=request.user)
+
         client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
         try:
+            # Verify payment signature
             client.utility.verify_payment_signature({
-                "razorpay_order_id": order_id,
+                "razorpay_order_id": razorpay_order_id,
                 "razorpay_payment_id": payment_id,
                 "razorpay_signature": signature,
             })
+
+            # ✅ Payment Successful
             order.payment_status = "PAID"
             order.razorpay_payment_id = payment_id
             order.save()
+
+            # Clear cart after successful payment
             request.session['cart'] = {}
+
             return redirect("payment_success", order_id=order.id)
-        except:
+
+        except razorpay.errors.SignatureVerificationError:
+            # ✅ Payment Failed
             order.payment_status = "FAILED"
             order.save()
             return redirect("payment_failed", order_id=order.id)
+
     return redirect("home")
 
-# ---------------- PAYMENT SUCCESS ----------------
+
+# ---------------- PAYMENT SUCCESS PAGE ----------------
 @login_required
 def payment_success(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
     return render(request, "shop/payment_success.html", {"order": order})
 
-# ---------------- PAYMENT FAILED ----------------
+
+# ---------------- PAYMENT FAILED PAGE ----------------
 @login_required
 def payment_failed(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
@@ -498,7 +538,41 @@ def product_card_view(request):
     return render(request, 'shop/product_card.html', {'products': products})
 
 
-from django.shortcuts import render
 
 def order_success(request):
     return render(request, 'shop/order_success.html')
+
+
+@login_required
+def upi_instructions(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+
+    upi_id = "yourupi@upi"   # 🔥 YOUR REAL UPI ID
+    name = "My Shop"
+    amount = order.get_total_amount()
+
+    upi_deep_link = (
+        f"upi://pay?pa={upi_id}"
+        f"&pn={name}"
+        f"&tn=Order {order.id}"
+        f"&am={amount}"
+        f"&cu=INR"
+    )
+
+    return render(request, "shop/upi_instructions.html", {
+        "order": order,
+        "amount": amount,
+        "upi_id": upi_id,
+        "upi_deep_link": upi_deep_link,
+    })
+
+
+@login_required
+def upi_payment_done(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    order.payment_status = "PAID"
+    order.save()
+    return redirect("order_success")
+
+
+
