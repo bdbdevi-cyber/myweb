@@ -31,6 +31,9 @@ from .forms import UserForm, ProfileForm
 from .models import Order, OrderItem
 
 
+from .forms import UserForm, ProfileForm
+
+
 
 
 
@@ -50,21 +53,42 @@ def my_address(request):
 
 
 
+
 @login_required
 def my_profile(request):
     user = request.user
     profile, created = Profile.objects.get_or_create(user=user)
 
     if request.method == "POST":
+
+        # 🔥 DELETE IMAGE
+        if 'delete_image' in request.POST:
+            if profile.profile_image:
+                profile.profile_image.delete(save=True)
+                messages.success(request, "Profile photo deleted successfully ✅")
+
         user_form = UserForm(request.POST, instance=user)
-        profile_form = ProfileForm(request.POST, instance=profile)
+        profile_form = ProfileForm(
+            request.POST,
+            request.FILES,
+            instance=profile
+        )
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
 
-            # ✅ SAVE ayyaka Profile Options ki vellali
-            return redirect('profile')
+            if request.FILES.get('profile_image'):
+                messages.success(request, "Profile photo updated successfully ✅")
+            else:
+                messages.success(request, "Profile details updated successfully ✅")
+
+        # ✅ SAME PAGE ONLY (NO REDIRECT)
+        return render(request, 'shop/profile.html', {
+            'user_form': user_form,
+            'profile_form': profile_form,
+            'profile': profile
+        })
 
     else:
         user_form = UserForm(instance=user)
@@ -72,7 +96,8 @@ def my_profile(request):
 
     return render(request, 'shop/profile.html', {
         'user_form': user_form,
-        'profile_form': profile_form
+        'profile_form': profile_form,
+        'profile': profile
     })
 
 
@@ -270,12 +295,33 @@ def cart_add(request, id):
     return redirect("cart")
 
 
+
 @login_required
 def cart_remove(request, id):
+    """
+    Remove a product from session-based cart.
+    Updates session and shows success message.
+    """
     cart = request.session.get('cart', {})
-    cart.pop(str(id), None)
-    request.session['cart'] = cart
-    return redirect("cart")
+
+    product_id = str(id)
+    if product_id in cart:
+        cart.pop(product_id)
+        request.session['cart'] = cart
+        messages.success(request, "Item removed from cart ✅")
+    else:
+        messages.error(request, "Item not found in cart ❌")
+
+    # Redirect back to the same page
+    return redirect(request.META.get('HTTP_REFERER', 'cart'))
+
+# @login_required
+# def remove_from_cart(request, item_id):
+#     cart_item = get_object_or_404(CartItem, id=item_id, user=request.user)
+#     cart_item.delete()
+#     messages.success(request, "Item removed from cart ✅")
+#     return redirect(request.META.get('HTTP_REFERER', 'cart'))
+
 
 
 # ---------------- WISHLIST ----------------

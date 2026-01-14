@@ -3,16 +3,34 @@ from django.contrib.auth.models import User
 
 
 from .models import Profile
+from django import forms
+from django.contrib.auth.models import User
+from .models import Profile
+
+
 
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email']
 
+
+# 🔥 CUSTOM FILE INPUT (NO "Currently", NO PATH)
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['phone', 'address']
+        fields = ['profile_image', 'phone', 'address']
+
+        widgets = {
+            'profile_image': forms.FileInput(attrs={
+                'accept': 'image/*',
+                'style': 'display:none;',   # hide default ugly input
+                'id': 'id_profile_image'
+            }),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
+
 
 
 

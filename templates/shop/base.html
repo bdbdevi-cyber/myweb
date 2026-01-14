@@ -32,6 +32,7 @@
             gap: 8px;
         }
 
+        /* 🔥 AVATAR IMAGE / LETTER */
         .avatar {
             width: 34px;
             height: 34px;
@@ -42,6 +43,13 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .profile-dropdown {
@@ -135,10 +143,43 @@
         .filters-popup a:hover {
             background: #f1f5ff;
         }
+
+        /* ===== POPUP MESSAGES ===== */
+        .popup-container{
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        .popup{
+            background:#1ec38b;
+            color:#fff;
+            padding:10px 15px;
+            border-radius:8px;
+            margin-bottom:10px;
+            animation:fadeOut 4s forwards;
+        }
+        .popup.error{
+            background:#dc3545;
+        }
+        @keyframes fadeOut{
+            0%{opacity:1}
+            80%{opacity:1}
+            100%{opacity:0}
+        }
     </style>
 </head>
 
 <body>
+
+<!-- 🔥 POPUP MESSAGES -->
+{% if messages %}
+<div class="popup-container">
+  {% for message in messages %}
+    <div class="popup {{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
 
 <!-- ===== TOP NAV ===== -->
 <nav class="top-nav">
@@ -148,7 +189,11 @@
         <button class="profile-btn" onclick="toggleProfile()">
             <div class="avatar">
                 {% if user.is_authenticated %}
-                    {{ user.username|slice:":1"|upper }}
+                    {% if user.profile.profile_image %}
+                        <img src="{{ user.profile.profile_image.url }}">
+                    {% else %}
+                        {{ user.username|slice:":1"|upper }}
+                    {% endif %}
                 {% else %}
                     <i class="fa fa-user"></i>
                 {% endif %}
@@ -158,15 +203,19 @@
 
         <div class="profile-dropdown" id="profileDropdown">
             {% if user.is_authenticated %}
-               <a href="{% url 'profile' %}">
-    <i class="fa fa-user"></i> My Account
-</a>
-
-
-                <a href="{% url 'logout' %}"><i class="fa fa-right-from-bracket"></i> Logout</a>
+                <a href="{% url 'profile' %}">
+                    <i class="fa fa-user"></i> My Account
+                </a>
+                <a href="{% url 'logout' %}">
+                    <i class="fa fa-right-from-bracket"></i> Logout
+                </a>
             {% else %}
-                <a href="{% url 'login' %}"><i class="fa fa-right-to-bracket"></i> Login</a>
-                <a href="{% url 'signup' %}"><i class="fa fa-user-plus"></i> Signup</a>
+                <a href="{% url 'login' %}">
+                    <i class="fa fa-right-to-bracket"></i> Login
+                </a>
+                <a href="{% url 'signup' %}">
+                    <i class="fa fa-user-plus"></i> Signup
+                </a>
             {% endif %}
         </div>
     </div>
@@ -178,18 +227,10 @@
 
     <!-- RIGHT ICONS -->
     <div class="top-nav-right">
-
-        <!-- ❤️ WISHLIST -->
-        {% if user.is_authenticated %}
-        <a href="{% url 'wishlist' %}">
-            ❤️ {{ wishlist_count|default:0 }}
-        </a>
-        {% endif %}
-
-        <!-- 🛒 CART -->
-        <a href="{% url 'cart' %}">
-            🛒 {{ cart_count|default:0 }}
-        </a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'wishlist' %}">❤️ {{ wishlist_count }}</a>
+        <a href="{% url 'cart' %}">🛒 {{ cart_count }}</a>
+      {% endif %}
     </div>
 
 </nav>
