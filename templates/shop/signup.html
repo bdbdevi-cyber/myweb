@@ -5,74 +5,161 @@
 {% block title %}Sign Up - My Shop{% endblock %}
 
 {% block content %}
-<div class="card shadow p-4 mx-auto" style="max-width: 500px; margin-top: 50px; border-radius: 12px;">
-    <h3 class="text-center mb-4">Create Your Account</h3>
-    <p class="text-center text-muted mb-4" style="font-size: 14px;">
-        Create your account in one step
-    </p>
 
-    <form method="post" novalidate>
+<div class="signup-wrapper">
+
+  <div class="signup-bg">
+
+    <!-- IMAGE -->
+    <div class="signup-left" style="background-color:#ffffff;">
+      <!-- Strong high-res image with solid background -->
+      <img src="{% static 'shop/images/sign3_final.jpg' %}" 
+           alt="Signup Model" 
+           style="width:100%; height:100%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- FORM -->
+    <div class="signup-card">
+      <h2>Create Your Account</h2>
+      <p class="subtitle">Join us and start shopping today!</p>
+
+      <form method="post" novalidate>
         {% csrf_token %}
 
-        <!-- Username -->
-        <div class="mb-3">
-            {{ form.username.label_tag }}
-            {{ form.username|add_class:"form-control" }}
-            {% for error in form.username.errors %}
-                <div class="text-danger small">{{ error }}</div>
-            {% endfor %}
+        <div class="field-with-img">
+          <img src="{% static 'images/fashion_username.png' %}" class="label-img">
+          {{ form.username|add_class:"input" }}
         </div>
 
-        <!-- Email -->
-        <div class="mb-3">
-            {{ form.email.label_tag }}
-            {{ form.email|add_class:"form-control" }}
-            {% for error in form.email.errors %}
-                <div class="text-danger small">{{ error }}</div>
-            {% endfor %}
+        <div class="field-with-img">
+          <img src="{% static 'images/fashion_email.png' %}" class="label-img">
+          {{ form.email|add_class:"input" }}
         </div>
 
-        <!-- Phone -->
-        <div class="mb-3">
-            {{ form.phone.label_tag }}
-            {{ form.phone|add_class:"form-control" }}
-            {% for error in form.phone.errors %}
-                <div class="text-danger small">{{ error }}</div>
-            {% endfor %}
+        <div class="field-with-img">
+          <img src="{% static 'images/fashion_phone.png' %}" class="label-img">
+          {{ form.phone|add_class:"input" }}
         </div>
 
-        <!-- Address -->
-        <div class="mb-3">
-            {{ form.address.label_tag }}
-            {{ form.address|add_class:"form-control" }}
-            {% for error in form.address.errors %}
-                <div class="text-danger small">{{ error }}</div>
-            {% endfor %}
+        <div class="field-with-img">
+          <img src="{% static 'images/fashion_address.png' %}" class="label-img">
+          {{ form.address|add_class:"input textarea" }}
         </div>
 
-        <!-- Password -->
-        <div class="mb-3">
-            {{ form.password.label_tag }}
-            {{ form.password|add_class:"form-control" }}
-            {% for error in form.password.errors %}
-                <div class="text-danger small">{{ error }}</div>
-            {% endfor %}
+        <div class="field-with-img">
+          <img src="{% static 'images/fashion_password.png' %}" class="label-img">
+          {{ form.password|add_class:"input" }}
         </div>
 
-        <!-- Confirm Password -->
-        <div class="mb-3">
-            {{ form.confirm_password.label_tag }}
-            {{ form.confirm_password|add_class:"form-control" }}
-            {% for error in form.confirm_password.errors %}
-                <div class="text-danger small">{{ error }}</div>
-            {% endfor %}
+        <div class="field-with-img">
+          <img src="{% static 'images/fashion_confirm_password.png' %}" class="label-img">
+          {{ form.confirm_password|add_class:"input" }}
         </div>
 
-        <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>
-    </form>
-
-    <div class="text-center mt-3">
-        Already have an account? <a href="{% url 'login' %}">Login here</a>
+        <div class="form-actions">
+          <a href="{% url 'home' %}" class="action-btn">🏠 Home</a>
+          <button type="submit" class="action-btn">⭐ Register</button>
+        </div>
+      </form>
     </div>
+
+  </div>
 </div>
+
+<style>
+
+/* PAGE CENTER */
+.signup-wrapper{
+  min-height:calc(100vh - 120px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background: #ffffff;
+}
+
+/* MAIN CARD */
+.signup-bg{
+  display:flex;
+  flex-direction:row-reverse;  
+  width:900px;
+  max-width:95%;
+  height:560px;
+  background:#fff;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 25px 60px rgba(0,0,0,0.35);
+}
+
+/* IMAGE */
+.signup-left{
+  width:50%;
+  height:100%;
+  /* solid white background to avoid transparency fade */
+}
+
+.signup-left img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  opacity:1;
+  filter:none;  /* Strong colours guaranteed */
+}
+
+/* FORM */
+.signup-card{
+  width:50%;
+  padding:40px 35px;
+  background:#ffffff;
+}
+
+.subtitle{
+  color:#777;
+  margin-bottom:22px;
+}
+
+.field-with-img{
+  display:flex;
+  align-items:center;
+  margin-bottom:16px;
+}
+
+.label-img{
+  width:46px;
+  height:46px;
+  margin-right:12px;
+}
+
+.input{
+  width:100%;
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+.textarea{
+  height:60px;
+}
+
+.form-actions{
+  display:flex;
+  justify-content:space-between;
+  margin-top:22px;
+}
+
+.action-btn{
+  background:#c89b3c;
+  color:#fff;
+  padding:10px 22px;
+  border-radius:12px;
+  border:none;
+  font-weight:600;
+}
+
+.action-btn:hover{
+  background:#b1872f;
+}
+
+</style>
+
 {% endblock %}
