@@ -4,8 +4,16 @@
 
 {% block content %}
 
-<div class="card shadow p-4 mx-auto" style="max-width: 450px; text-align: center;">
-    <h3 class="text-center mb-4">Login</h3>
+<div class="glass-wrapper">
+
+    <div class="glass-card">
+        <div class="brand">
+            <span class="logo-icon">🛍</span>
+            <h2>SREE'S</h2>
+        </div>
+
+        <h3 class="welcome-text">Welcome Back!</h3>
+        <p class="sub-text">Login to your account</p>
 
         <form method="post">
             {% csrf_token %}
