@@ -27,32 +27,32 @@
         {% csrf_token %}
 
         <div class="field-with-img">
-          <img src="{% static 'images/fashion_username.png' %}" class="label-img">
+          <img src="{% static 'shop/images/Profile.jpg' %}" class="label-img">
           {{ form.username|add_class:"input" }}
         </div>
 
         <div class="field-with-img">
-          <img src="{% static 'images/fashion_email.png' %}" class="label-img">
+          <img src="{% static 'shop/images/Email.jpg' %}" class="label-img">
           {{ form.email|add_class:"input" }}
         </div>
 
         <div class="field-with-img">
-          <img src="{% static 'images/fashion_phone.png' %}" class="label-img">
+          <img src="{% static 'shop/images/Phone number.jpg' %}" class="label-img">
           {{ form.phone|add_class:"input" }}
         </div>
 
         <div class="field-with-img">
-          <img src="{% static 'images/fashion_address.png' %}" class="label-img">
+          <img src="{% static 'shop/images/Address.jpg' %}" class="label-img">
           {{ form.address|add_class:"input textarea" }}
         </div>
 
         <div class="field-with-img">
-          <img src="{% static 'images/fashion_password.png' %}" class="label-img">
+          <img src="{% static 'shop/images/Password.jpg' %}" class="label-img">
           {{ form.password|add_class:"input" }}
         </div>
 
         <div class="field-with-img">
-          <img src="{% static 'images/fashion_confirm_password.png' %}" class="label-img">
+          <img src="{% static 'shop/images/Password.jpg' %}" class="label-img">
           {{ form.confirm_password|add_class:"input" }}
         </div>
 
@@ -83,7 +83,7 @@
   flex-direction:row-reverse;  
   width:900px;
   max-width:95%;
-  height:560px;
+  height:600px;
   background:#fff;
   border-radius:24px;
   overflow:hidden;
@@ -148,7 +148,7 @@
 }
 
 .action-btn{
-  background:#c89b3c;
+  background:#6A0DAD;
   color:#fff;
   padding:10px 22px;
   border-radius:12px;
@@ -157,7 +157,7 @@
 }
 
 .action-btn:hover{
-  background:#b1872f;
+  background:#b66beb;
 }
 
 </style>

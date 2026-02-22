@@ -2,83 +2,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}My Shop{% endblock %}</title>
+    <meta charset="UTF-8" />
+    <title>My Shop</title>
 
-    <link rel="stylesheet" href="{% static 'shop/css/styles.css' %}">
+    <!-- MAIN CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'shop/css/styles.css' %}" />
+
+    <!-- ICONS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
     <style>
         body {
             margin: 0;
             padding-bottom: 70px;
-            font-family: Arial, sans-serif;
         }
 
-        /* ===== PROFILE POPUP ===== */
-        .profile-popup-bg {
+        /* ===== PROFILE DROPDOWN ===== */
+        .profile-wrapper {
+            position: relative;
+        }
+
+        .profile-btn {
+            background: #6A0DAD;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0b7285, #22b8cf);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 48px;
+            left: 0;
+            background: #fff;
+            width: 210px;
+            border-radius: 14px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.18);
             display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.55);
+            flex-direction: column;
             z-index: 6000;
         }
-        .profile-popup-box {
-            width: 90%;
-            max-width: 360px;
-            background: #fff;
-            padding: 25px;
-            border-radius: 14px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 5px 18px rgba(0,0,0,0.25);
-            text-align: center;
-        }
-        .popup-btn {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 10px;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .existing-btn { background: #0d6efd; color: #fff; }
-        .new-btn { background: #28a745; color: #fff; }
-        .close-btn { background: #dc3545; color: #fff; }
 
-        /* ===== TOP NAV ===== */
+        .profile-dropdown a {
+            padding: 12px 16px;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            gap: 10px;
+        }
+
+        .profile-dropdown a:hover {
+            background: #f3f4f6;
+        }
+
         .top-nav {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
+            padding: 10px 16px;
             background: #fff;
-            padding: 10px 0;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
-            z-index: 2000;
-        }
-        .top-nav a, .top-nav span {
-            text-decoration: none;
-            color: #000;
-            font-size: 16px;
-            cursor: pointer;
-            position: relative;
-        }
-        .badge {
-            position: absolute;
-            top: -5px;
-            right: -10px;
-            background: red;
-            color: white;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 12px;
+            z-index: 3000;
         }
 
-        /* ===== BOTTOM NAV ===== */
+        .top-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -89,111 +106,173 @@
             justify-content: space-around;
             padding: 12px 0;
             box-shadow: 0 -2px 6px rgba(0,0,0,0.15);
-            z-index: 3000;
+            z-index: 4000;
         }
 
-        .filters-dropup {
+        .bottom-nav a,
+        .bottom-nav span {
+            text-decoration: none;
+            color: #000;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .filters-popup {
             display: none;
-            position: absolute;
-            bottom: 55px;
+            position: fixed;
+            bottom: 70px;
             left: 50%;
             transform: translateX(-50%);
             background: #fff;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            min-width: 180px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            z-index: 4000;
+            border-radius: 10px;
+            min-width: 200px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+            z-index: 5000;
         }
-        .filters-dropup a {
+
+        .filters-popup a {
             display: block;
-            padding: 10px;
+            padding: 12px;
             text-align: center;
             color: #000;
             text-decoration: none;
+        }
+
+        .filters-popup a:hover {
+            background: #f1f5ff;
+        }
+
+        .popup-container{
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .popup{
+            background:#1ec38b;
+            color:#fff;
+            padding:10px 15px;
+            border-radius:8px;
+            margin-bottom:10px;
+            animation:fadeOut 4s forwards;
+        }
+
+        .popup.error{
+            background:#dc3545;
+        }
+
+        @keyframes fadeOut{
+            0%{opacity:1}
+            80%{opacity:1}
+            100%{opacity:0}
         }
     </style>
 </head>
 
 <body>
 
-<!-- ===== PROFILE POPUP ===== -->
-<div class="profile-popup-bg" id="profilePopup">
-    <div class="profile-popup-box">
-        <h3>Select Option</h3>
 
-        {% if user.is_authenticated %}
-            <a href="{% url 'profile' %}">
-                <button class="popup-btn existing-btn">My Account</button>
-            </a>
-            <a href="{% url 'logout' %}">
-                <button class="popup-btn new-btn">Logout</button>
-            </a>
-        {% else %}
-            <a href="{% url 'login' %}">
-                <button class="popup-btn existing-btn">Existing User</button>
-            </a>
-            <a href="{% url 'signup' %}">
-                <button class="popup-btn new-btn">New User</button>
-            </a>
-        {% endif %}
+<body>
 
-        <button class="popup-btn close-btn" onclick="closeProfilePopup()">Close</button>
-    </div>
+<!-- 🔥 POPUP MESSAGES -->
+{% if messages %}
+<div class="popup-container">
+  {% for message in messages %}
+    <div class="popup {{ message.tags }}">{{ message }}</div>
+  {% endfor %}
 </div>
+{% endif %}
 
 <!-- ===== TOP NAV ===== -->
 <nav class="top-nav">
-    <a href="{% url 'home' %}">🏠 Home</a>
-    <a href="{% url 'category' 'sarees' %}">🧣 Sarees</a>
-    <a href="{% url 'category' 'dress' %}">👗 Dresses</a>
-    <span onclick="toggleFilters()">🔍 Filters</span>
-    <span onclick="openProfilePopup()">👤 Profile</span>
 
-    {% if user.is_authenticated %}
-        <a href="{% url 'wishlist' %}">
-            ❤️ Wishlist
-            {% with wishlist_count=user.wishlist_set.count %}
-            {% if wishlist_count > 0 %}
-                <span class="badge">{{ wishlist_count }}</span>
+    <!-- PROFILE -->
+    <div class="profile-wrapper">
+        <button class="profile-btn" onclick="toggleProfile()">
+            <div class="avatar">
+                {% if user.is_authenticated %}
+                    {% if user.profile.profile_image %}
+                        <img src="{{ user.profile.profile_image.url }}">
+                    {% else %}
+                        {{ user.username|slice:":1"|upper }}
+                    {% endif %}
+                {% else %}
+                    <i class="fa fa-user"></i>
+                {% endif %}
+            </div>
+            <span>Profile</span>
+        </button>
+
+        <div class="profile-dropdown" id="profileDropdown">
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}">
+                    <i class="fa fa-user"></i> My Account
+                </a>
+                <a href="{% url 'logout' %}">
+                    <i class="fa fa-right-from-bracket"></i> Logout
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}">
+                    <i class="fa fa-right-to-bracket"></i> Login
+                </a>
+                <a href="{% url 'signup' %}">
+                    <i class="fa fa-user-plus"></i> Signup
+                </a>
             {% endif %}
-            {% endwith %}
-        </a>
-    {% else %}
-        <a href="{% url 'login' %}">❤️ Wishlist</a>
-    {% endif %}
+        </div>
+    </div>
+
+    <!-- LOGO -->
+    <a href="{% url 'home' %}">
+        <img src="{% static 'shop/images/ammuu logo.jpg' %}" height="40">
+    </a>
+
+    <!-- RIGHT ICONS -->
+    <div class="top-nav-right">
+      {% if user.is_authenticated %}
+        <a href="{% url 'wishlist' %}">❤️ {{ wishlist_count }}</a>
+        <a href="{% url 'cart' %}">🛒 {{ cart_count }}</a>
+      {% endif %}
+    </div>
+
 </nav>
 
 <!-- ===== MAIN CONTENT ===== -->
-<main class="container">
-    {% block content %}{% endblock %}
-</main>
+{% block content %}{% endblock %}
+
+<!-- ===== FILTERS POPUP ===== -->
+<div class="filters-popup" id="filtersPopup">
+    <a href="{% url 'filters' %}?order=price_asc">Price Low → High</a>
+    <a href="{% url 'filters' %}?order=price_desc">Price High → Low</a>
+</div>
 
 <!-- ===== BOTTOM NAV ===== -->
 <nav class="bottom-nav">
     <a href="{% url 'home' %}">🏠 Home</a>
     <a href="{% url 'category' 'sarees' %}">🧣 Sarees</a>
-    <a href="{% url 'category' 'dress' %}">👗 Dresses</a>
+    <a href="{% url 'category' 'dresses' %}">👗 Dresses</a>
     <span onclick="toggleFilters()">🔍 Filters</span>
-    <span onclick="openProfilePopup()">👤 Profile</span>
-
-    <div class="filters-dropup" id="filtersDropup">
-        <a href="{% url 'filters' %}?order=price_asc">Price Low → High</a>
-        <a href="{% url 'filters' %}?order=price_desc">Price High → Low</a>
-    </div>
+    <a href="{% url 'offers' %}">🏷 Offers</a>
 </nav>
 
+<!-- ===== JS ===== -->
 <script>
-    function openProfilePopup() {
-        document.getElementById('profilePopup').style.display = 'block';
+function toggleProfile() {
+    const d = document.getElementById("profileDropdown");
+    d.style.display = d.style.display === "flex" ? "none" : "flex";
+}
+
+function toggleFilters() {
+    const f = document.getElementById("filtersPopup");
+    f.style.display = f.style.display === "block" ? "none" : "block";
+}
+
+document.addEventListener("click", function (e) {
+    if (!e.target.closest(".profile-wrapper")) {
+        document.getElementById("profileDropdown").style.display = "none";
     }
-    function closeProfilePopup() {
-        document.getElementById('profilePopup').style.display = 'none';
-    }
-    function toggleFilters() {
-        const f = document.getElementById('filtersDropup');
-        f.style.display = f.style.display === 'block' ? 'none' : 'block';
-    }
+});
 </script>
 
 </body>

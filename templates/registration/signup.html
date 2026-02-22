@@ -23,6 +23,7 @@
         <div class="mb-3">
             <label for="id_username" class="form-label">Username</label>
             <input type="text" name="username" class="form-control" id="id_username" value="{{ form.username.value }}">
+            
             {% if form.username.errors %}
                 <div class="text-danger" style="font-size: 13px;">
                     {{ form.username.errors.0 }}

@@ -5,15 +5,23 @@
 
 {% block content %}
 
+<button class="btn btn-purple w-100"
+        {% if not p.available %}disabled{% endif %}>
+    🛒 Add to Cart
+</button>
+
+
 <style>
 .cart-wrapper {
     max-width: 800px;
     margin: 20px auto;
-    background: #fff;
+    background:#fff;
     padding: 16px;
     border-radius: 14px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.12);
 }
+  
+
 
 .cart-wrapper h2 {
     margin-bottom: 15px;
@@ -62,13 +70,13 @@
 }
 
 .btn.primary {
-    background: #0b7285;
+    background:#6A0DAD;
     color: #fff;
 }
 
 .btn.secondary {
-    background: #e5e7eb;
-    color: #111;
+    background: #6A0DAD;
+    color: #fff;
 }
 
 .btn.danger {
