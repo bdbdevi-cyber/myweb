@@ -50,9 +50,9 @@
                     <p class="availability out-of-stock">Out of Stock</p>
                 {% endif %}
 
-                <p class="description">
+                <!-- <p class="description">
                     {{ p.description|truncatechars:60 }}
-                </p>
+                </p> -->
 
                 <form action="{% url 'cart_add' p.id %}" method="post">
                     {% csrf_token %}
