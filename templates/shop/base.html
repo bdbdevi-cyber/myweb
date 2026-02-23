@@ -102,7 +102,7 @@
             gap: 16px;
         }
 
-        .bottom-nav {
+        /* .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
@@ -121,7 +121,7 @@
             color: #000;
             cursor: pointer;
             font-size: 15px;
-        }
+        } */
 
         .filters-popup {
             display: none;
@@ -179,7 +179,6 @@
 <body>
 
 
-<body>
 
 <!-- 🔥 POPUP MESSAGES -->
 {% if messages %}
@@ -255,11 +254,32 @@
 
 <!-- ===== BOTTOM NAV ===== -->
 <nav class="bottom-nav">
-    <a href="{% url 'home' %}">🏠 Home</a>
-    <a href="{% url 'category' 'sarees' %}">🧣 Sarees</a>
-    <a href="{% url 'category' 'dresses' %}">👗 Dresses</a>
-    <span onclick="toggleFilters()">🔍 Filters</span>
-    <a href="{% url 'offers' %}">🏷 Offers</a>
+
+    <a href="{% url 'home' %}">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+    </a>
+
+    <a href="{% url 'category' 'sarees' %}">
+        <i class="fa-solid fa-shirt"></i>
+        <span>Sarees</span>
+    </a>
+
+    <a href="{% url 'category' 'dresses' %}">
+        <i class="fa-solid fa-person-dress"></i>
+        <span>Dresses</span>
+    </a>
+
+    <a href="javascript:void(0);" onclick="toggleFilters()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <span>Filters</span>
+    </a>
+
+    <a href="{% url 'offers' %}">
+        <i class="fa-solid fa-tag"></i>
+        <span>Offers</span>
+    </a>
+
 </nav>
 
 <!-- ===== JS ===== -->
