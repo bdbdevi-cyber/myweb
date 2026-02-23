@@ -39,7 +39,7 @@
             width: 34px;
             height: 34px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #0b7285, #22b8cf);
+            background: linear-gradient(135deg, #6A0DAD, #640291);
             color: #ffffff;
             display: flex;
             align-items: center;
@@ -206,7 +206,7 @@
                     <i class="fa fa-user"></i>
                 {% endif %}
             </div>
-            <span>Profile</span>
+            <!-- <span>Profile</span> -->
         </button>
 
         <div class="profile-dropdown" id="profileDropdown">
@@ -259,12 +259,10 @@
         <i class="fa-solid fa-house"></i>
         <span>Home</span>
     </a>
-
-    <a href="{% url 'category' 'sarees' %}">
-        <i class="fa-solid fa-shirt"></i>
-        <span>Sarees</span>
+     <a href="{% url 'category' 'sarees' %}">
+       <i class="fa-solid fa-leaf"></i>
+          <span>Sarees</span>
     </a>
-
     <a href="{% url 'category' 'dresses' %}">
         <i class="fa-solid fa-person-dress"></i>
         <span>Dresses</span>

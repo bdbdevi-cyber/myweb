@@ -1807,3 +1807,58 @@ button.btn-add-to-cart {
 /* ----------------------------------- */
 
 
+/* .bottom-nav-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+.bottom-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+/* ===== FORCE FIX FOR BOTTOM NAV ICON ===== */
+/* .bottom-nav img {
+    width: 22px !important;
+    height: 22px !important;
+    object-fit: contain !important;
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+.bottom-nav a {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+}
+
+
+/* ===== FINAL FIX FOR BOTTOM NAV ICON ===== */
+/* .bottom-nav i {
+    font-size: 20px !important;
+    line-height: 1 !important;
+    display: block !important;
+}
+
+.bottom-nav a {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+} */ 
+
+.nav-icon {
+    width: 24px;
+    height: 24px;
+    display: block;
+    margin: 0 auto 4px;
+}
+

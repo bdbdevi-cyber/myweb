@@ -1475,3 +1475,37 @@ body {
 
 /* =================================================================== */
 /* ===================== SIGNUP PAGE ===================== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.15);
+    z-index: 4000;
+}
+
+/* 🔥 THIS IS IMPORTANT */
+.bottom-nav a {
+    display: flex;
+    flex-direction: column;   /* icon top, text bottom */
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #6f42c1;           /* 💜 violet */
+    font-size: 13px;
+    gap: 4px;
+}
+
+.bottom-nav i {
+    font-size: 20px;
+}
+
+.nav-icon {
+    width: 22px;
+    height: 22px;
+}
