@@ -239,7 +239,7 @@ body {
     }
 }
 
-@media (max-width: 480px) {
+/* @media (max-width: 480px) {
     .product-grid {
         grid-template-columns: 1fr;
     }
@@ -247,8 +247,8 @@ body {
     .container {
         padding: 12px;
         padding-bottom: 140px;
-    }
-}
+    } */
+/* } */
 /* ================= PROFILE BUTTON (TOP NAV) ================= */
 .profile-btn {
     display: flex;
