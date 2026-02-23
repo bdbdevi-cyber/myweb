@@ -1811,9 +1811,9 @@ button.btn-add-to-cart {
 
 
 
-@media (max-width: 600px) {
+/* @media (max-width: 600px) {
     .product-grid {
         grid-template-columns: repeat(1, 1fr);
         gap: 12px;
     }
-}
+} */
