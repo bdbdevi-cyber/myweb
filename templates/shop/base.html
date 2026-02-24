@@ -27,12 +27,12 @@
         }
 
         .profile-btn {
-            background:#6A0DAD;
-            border: none;
+            background:#6A0DAD; 
+            border: none; 
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 8px; 
         }
 
         .avatar {
@@ -86,7 +86,7 @@
 
         .top-nav {
             display: flex;
-            justify-content: space-between;
+            /* justify-content: space-between; */
             align-items: center;
             padding: 10px 16px;
             background: #fff;
@@ -94,6 +94,7 @@
             position: sticky;
             top: 0;
             z-index: 3000;
+            position: relative;
         }
 
         .top-nav-right {
@@ -101,6 +102,11 @@
             align-items: center;
             gap: 16px;
         }
+        .logo-center {
+             position: absolute;
+             left: 50%;
+             transform: translateX(-50%);
+}
 
         /* .bottom-nav {
             position: fixed;
@@ -229,7 +235,7 @@
     </div>
 
     <!-- LOGO -->
-    <a href="{% url 'home' %}">
+    <a href="{% url 'home' %}" class="logo-center">
         <img src="{% static 'shop/images/ammuu logo.jpg' %}" height="40">
     </a>
 

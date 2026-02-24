@@ -26,19 +26,19 @@
         }
 
         .profile-btn {
-            background: #6A0DAD;
+            background: #6A0DAD; 
             border: none;
             cursor: pointer;
-            display: flex;
+            display: flex; 
             align-items: center;
-            gap: 8px;
-        }
+            gap: 8px; 
+        } 
 
         .avatar {
             width: 34px;
             height: 34px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #0b7285, #22b8cf);
+            background: linear-gradient(135deg, #6A0DAD, #6A0DAD);
             color: #ffffff;
             display: flex;
             align-items: center;
@@ -80,7 +80,7 @@
 
         .top-nav {
             display: flex;
-            justify-content: space-between;
+            /* justify-content: space-between; */
             align-items: center;
             padding: 10px 16px;
             background: #fff;
@@ -88,6 +88,7 @@
             position: sticky;
             top: 0;
             z-index: 3000;
+            position: relative;
         }
 
         .top-nav-right {
@@ -161,6 +162,11 @@
         .popup.error{
             background:#dc3545;
         }
+        .logo-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+}
 
         @keyframes fadeOut{
             0%{opacity:1}
@@ -224,7 +230,7 @@
     </div>
 
     <!-- LOGO -->
-    <a href="{% url 'home' %}">
+    <a href="{% url 'home' %}" class="logo-center">
         <img src="{% static 'shop/images/ammuu logo.jpg' %}" height="40">
     </a>
 
