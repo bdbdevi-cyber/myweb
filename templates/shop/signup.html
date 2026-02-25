@@ -172,11 +172,24 @@
     flex-direction: column;   /* image top, form bottom */
     height: auto;             /* remove fixed height */
   }
+  @media (max-width:768px){
 
   .signup-left{
+    width:100%;
+    height:auto;
+  }
+
+  .signup-left img{
+    height:auto;
+    object-fit:contain;   /* 👈 change this */
+  }
+
+}
+
+  /* .signup-left{
     width: 100%;
     height: 260px;            /* fixed image height for mobile */
-  }
+  } */
 
   .signup-card{
     width: 100%;
