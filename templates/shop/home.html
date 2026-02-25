@@ -57,7 +57,8 @@
                 <form action="{% url 'cart_add' p.id %}" method="post">
                     {% csrf_token %}
                     <button class="btn btn-purple" {% if not p.available %}disabled{% endif %}>
-                     🛒 Add to Cart
+                          <i class="fa fa-cart-shopping"></i>
+                      Add to Cart
                      </button>
 
 

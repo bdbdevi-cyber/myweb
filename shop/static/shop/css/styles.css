@@ -396,7 +396,7 @@ body {
 }
 
 /* Add to cart button */
-.btn-add-to-cart {
+/* .btn-add-to-cart {
     width: 20%;
     margin-top: 10px;
     padding: 10px;
@@ -406,12 +406,38 @@ body {
     border-radius: 10px;
     cursor: pointer;
     font-size: 14px;
-}
-
+} */
+/* 
 .btn-add-to-cart:disabled {
     background: #999;
     cursor: not-allowed;
+} */
+
+/* .btn-add-to-cart {
+    width: 100%;
+    background: linear-gradient(135deg, #6A0DAD, #8A2BE2);
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+    margin-top: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    text-decoration: none;
 }
+
+.btn-add-to-cart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(106, 13, 173, 0.4);
+} */
+
 /* ================= WISHLIST ================= */
 .wishlist-icon {
     position: absolute;
@@ -1202,10 +1228,10 @@ body {
   cursor: pointer;
 }
 
-.btn.cart {
+/* .btn.cart {
   background: #0b7285;
   color: #fff;
-}
+} */
 
 .btn.buy {
   background: orange;
@@ -1316,10 +1342,10 @@ body {
   border: none;
 }
 
-.btn-add-to-cart {
+/* .btn-add-to-cart {
   background: #0b7285;
   color: #fff;
-}
+} */
 
 .btn-buy-now {
   background: #ff7a00;
@@ -1446,7 +1472,7 @@ body {
 }
 
 .pd-cart-btn {
-  background: #0b7285;
+  /* background: #0b7285; */
   color: #fff;
 }
 
@@ -1508,4 +1534,95 @@ body {
 .nav-icon {
     width: 22px;
     height: 22px;
+}
+
+/* ------------------ */
+
+/* ===== CATEGORY PAGE ADD TO CART (FINAL FIX) ===== */
+.product-card .btn-add-to-cart {
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px 18px;
+    background: linear-gradient(135deg, #6A0DAD, #8A2BE2);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.product-card .btn-add-to-cart:hover {
+    background: linear-gradient(135deg, #5a0cb0, #7a1fe0);
+}
+
+
+/* ===== CATEGORY PAGE ADD TO CART FINAL ===== */
+.product-card .btn-add-to-cart {
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px 18px;
+    background: linear-gradient(135deg, #6A0DAD, #8A2BE2);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.product-card .btn-add-to-cart:hover {
+    background: linear-gradient(135deg, #5a0cb0, #7a1fe0);
+}
+
+
+
+/* ===== FORCE PURPLE CATEGORY BUTTON ===== */
+.product-card form button {
+    width: 100% !important;
+    background: linear-gradient(135deg, #6A0DAD, #8A2BE2) !important;
+    color: #fff !important;
+    padding: 12px 18px !important;
+    border: none !important;
+    border-radius: 30px !important;
+    font-weight: 600 !important;
+    cursor: pointer;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.product-card form button:hover {
+    background: linear-gradient(135deg, #5a0cb0, #7a1fe0) !important;
+}
+
+/* ===== CATEGORY PAGE ADD TO CART FINAL ===== */
+.product-card .btn-add-to-cart {
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px 18px;
+    background: linear-gradient(135deg, #6A0DAD, #8A2BE2);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.product-card .btn-add-to-cart:hover {
+    background: linear-gradient(135deg, #5a0cb0, #7a1fe0);
 }

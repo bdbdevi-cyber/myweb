@@ -403,22 +403,22 @@ body {
 }
 
 /* Add to cart button */
-.btn-add-to-cart {
+/* .btn-add-to-cart {
     width: 20%;
     margin-top: 10px;
     padding: 10px;
-    background: #0b7285;
-    color: #fff;
+    /* background: #0b7285; */
+    /* color: #fff;
     border: none;
     border-radius: 10px;
-    cursor: pointer;
-    font-size: 14px;
-}
+    cursor: pointer; */
+    /* font-size: 14px; */
+/* } */ */
 
-.btn-add-to-cart:disabled {
+/* .btn-add-to-cart:disabled {
     background: #999;
     cursor: not-allowed;
-}
+} */
 /* ================= WISHLIST ================= */
 .wishlist-icon {
     position: absolute;
@@ -1210,7 +1210,7 @@ body {
 }
 
 .btn.cart {
-  background: #0b7285;
+  /* background: #0b7285; */
   color: #fff;
 }
 
@@ -1322,11 +1322,11 @@ body {
   cursor: pointer;
   border: none;
 }
-
+/* 
 .btn-add-to-cart {
   background: #0b7285;
   color: #fff;
-}
+} */
 
 .btn-buy-now {
   background: #ff7a00;
@@ -1453,7 +1453,7 @@ body {
 }
 
 .pd-cart-btn {
-  background: #0b7285;
+  /* background: #0b7285; */
   color: #fff;
 }
 
@@ -1641,31 +1641,31 @@ button.btn-purple {
 }
 
 
-.btn-add-to-cart {
+/* .btn-add-to-cart {
     width: 100%;              /* 🔥 full width */
-    margin-top: 12px;
+    /* margin-top: 12px;
     padding: 12px;
     background: #6f42c1;      /* 💜 purple */
-    color: #fff;
-    border: none;
-    border-radius: 10px;
+    /* color: #fff; */
+    /* border: none; */
+    /* border-radius: 10px;
     cursor: pointer;
     font-size: 15px;
-    font-weight: 600;
-    white-space: nowrap;      /* 🔥 text vertical avvakunda */
-}
+    font-weight: 600; */
+    /* white-space: nowrap;      🔥 text vertical avvakunda */
+/* } */ */
 
-.btn-add-to-cart:hover {
+/* .btn-add-to-cart:hover {
     background: #5a32a3;
-}
+} */
 
-.btn-add-to-cart:disabled {
+/* .btn-add-to-cart:disabled {
     background: #cbb8e8;
-    cursor: not-allowed;
-}
+    cursor: not-allowed; */
+/* } */ */
 
 /* ===== FORCE PURPLE ADD TO CART ===== */
-.btn-add-to-cart,
+/* .btn-add-to-cart,
 button.btn-add-to-cart {
     background: #6f42c1 !important;
     color: #fff !important;
@@ -1678,7 +1678,7 @@ button.btn-add-to-cart {
 .btn-add-to-cart:hover {
     background: #58d44f !important;
     border: rgba(0, 0, 0, 0.25);
-}
+} */
 
 
 .btn-purple {
@@ -1861,4 +1861,26 @@ button.btn-add-to-cart {
     display: block;
     margin: 0 auto 4px;
 }
+/* ===== FINAL ADD TO CART BUTTON ===== */
+.product-card .btn-add-to-cart {
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px 18px;
+    background: linear-gradient(135deg, #6A0DAD, #8A2BE2);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.3s ease;
+}
 
+.product-card .btn-add-to-cart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(106, 13, 173, 0.4);
+}

@@ -48,10 +48,24 @@
                     {% if p.available %}
                         <p class="availability in-stock">✔ In Stock</p>
 
-                        <form action="{% url 'cart_add' p.id %}" method="post">
+                        <!-- <form action="{% url 'cart_add' p.id %}" method="post">
                             {% csrf_token %}
                             <button class="btn small">Add to Cart</button>
-                        </form>
+                        </form> -->
+                 <!-- <form action="{% url 'cart_add' p.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn-add-to-cart" {% if not p.available %}disabled{% endif %}>
+                     🛒 Add to Cart
+                     </button>
+                </form> -->
+                <form action="{% url 'cart_add' p.id %}" method="post">
+                    {% csrf_token %}
+                   <button type="submit" class="btn-add-to-cart">
+                      <i class="fa fa-cart-shopping"></i>
+                      Add to Cart
+                  </button>
+                </form>
+
                     {% else %}
                         <p class="availability out-of-stock">✖ Out of Stock</p>
                     {% endif %}
@@ -64,5 +78,46 @@
     </section>
 
 </div>
+<style>
+/* CATEGORY PAGE ADD TO CART BUTTON FIX */
+.btn-add-to-cart {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 
-{% endblock %}
+    background: linear-gradient(135deg, #8760c6, #5e04a7) !important;
+    color: #fff !important;
+
+    padding: 14px !important;
+    border: none !important;
+    border-radius: 30px !important;
+
+    font-size: 16px !important;
+    font-weight: 600 !important;
+
+    cursor: pointer;
+    transition: all 0.3s ease !important;
+    margin-top: 12px !important;
+}
+
+.btn-add-to-cart i {
+    font-size: 14px;
+}
+
+.btn-add-to-cart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(137, 93, 207, 0.4);
+}
+</style>
+<script>
+document.querySelectorAll(".btn-add-to-cart").forEach(button => {
+    button.addEventListener("click", function() {
+        this.style.background = "#28a745";  // green colour
+        this.innerHTML = "✓ Added";
+    });
+});
+</script>
+
+{% endblock %}, buddy add chesa  
