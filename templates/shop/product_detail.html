@@ -54,20 +54,53 @@
 
       <form method="POST" action="{% url 'cart_add' product.id %}">
         {% csrf_token %}
-        <button type="submit" class="pd-cart-btn">Add to Cart</button>
+        <button type="submit" class="btn btn-purple">Add to Cart</button>
       </form>
 
       <form method="POST" action="{% url 'buy_now' product.id %}">
         {% csrf_token %}
-        <button type="submit" class="pd-buy-btn">Buy Now</button>
+        <button type="submit" class="btn btn-orange">Buy Now</button>
       </form>
 
     </div>
   </div>
 
 </div>
+<style>
+
+.btn-purple{
+    background-color: #7b2cbf;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-purple:hover{
+    background-color: #6a0dad;
+}
+
+/* 🧡 ORANGE BUTTON */
+.btn-orange{
+    background-color: #ff7a00 !important;
+    color: white !important;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-orange:hover{
+    background-color: #e66a00 !important;
+}
+</style>
+
 
 <!-- JS FOR THUMBNAIL CLICK -->
+
 <script>
 function changeImage(el) {
     // Update main image
