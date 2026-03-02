@@ -54,12 +54,17 @@
 
       <form method="POST" action="{% url 'cart_add' product.id %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-purple">Add to Cart</button>
+        <button type="submit" class="btn btn-purple">
+           <i class="fa fa-cart-shopping"></i>
+           Add to Cart</button>
       </form>
 
       <form method="POST" action="{% url 'buy_now' product.id %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-orange">Buy Now</button>
+        <button type="submit" class="btn btn-orange">
+        
+       <i class="fa-solid fa-bolt"></i>
+       Buy Now</button>
       </form>
 
     </div>
