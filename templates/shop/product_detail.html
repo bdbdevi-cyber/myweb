@@ -105,11 +105,19 @@
 
 
 /* WRAPPER */
-.pd-wrapper {
+/* .pd-wrapper {
     display: flex;
     gap: 20px;
     margin: 20px;
     flex-wrap: wrap; /* important for mobile */
+/* } */ 
+/* WRAPPER */
+.pd-wrapper {
+    display: flex;
+    gap: 20px;
+    margin: 20px auto;       /* center align wrapper */
+    flex-wrap: wrap;         /* mobile friendly */
+    justify-content: center; /* center items horizontally */
 }
 
 /* IMAGE CARD */
@@ -165,6 +173,15 @@
 
     .pd-info-card {
         text-align: center;
+    }
+}
+
+
+/* DESKTOP FIX */
+@media (min-width: 769px) {
+    .pd-wrapper {
+        flex-direction: row;
+        justify-content: center;
     }
 }
 
