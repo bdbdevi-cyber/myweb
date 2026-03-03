@@ -97,6 +97,9 @@
     font-size: 16px !important;
     font-weight: 600 !important;
 
+    white-space: nowrap !important;   /* 🔥 ADD THIS LINE */
+    flex-wrap: nowrap !important;     /* 🔥 extra safe */
+
     cursor: pointer;
     transition: all 0.3s ease !important;
     margin-top: 12px !important;
@@ -120,4 +123,4 @@ document.querySelectorAll(".btn-add-to-cart").forEach(button => {
 });
 </script>
 
-{% endblock %}, buddy add chesa  
+{% endblock %}
