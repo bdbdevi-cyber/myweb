@@ -71,41 +71,35 @@
 /* FILTER PAGE ADD TO CART BUTTON */
 
 .btn-add-to-cart {
-    width: 100% !important;
-    display: flex !important;
+    width: 100%;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
 
-    background: linear-gradient(135deg, #7b2ff7, #9d4edd) !important;
-    color: #fff !important;
+    background: linear-gradient(135deg, #7b2ff7, #9d4edd);
+    color: #fff;
 
-    padding: 14px !important;
-    border: none !important;
-    border-radius: 30px !important;
+    padding: 10px;          /* 🔥 Reduced */
+    border: none;
+    border-radius: 25px;
 
-    font-size: 16px !important;
-    font-weight: 600 !important;
+    font-size: 14px;        /* 🔥 Reduced */
+    font-weight: 600;
+
+    white-space: nowrap;    /* 🔥 Important */
+    overflow: hidden;       /* 🔥 Safety */
+    text-overflow: ellipsis;
 
     cursor: pointer;
-    transition: all 0.3s ease !important;
-    margin-top: 12px !important;
+    transition: all 0.3s ease;
+    margin-top: 10px;
 }
 
-.btn-add-to-cart i {
-    font-size: 14px;
-}
-
-.btn-add-to-cart:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(123, 47, 247, 0.4);
-}
-
-
-/* ✅ ADD THIS */
 @media (max-width: 768px) {
-    .product-grid {
-        grid-template-columns: 1fr !important;
+    .btn-add-to-cart {
+        font-size: 13px;
+        padding: 8px;
     }
 }
 </style>
