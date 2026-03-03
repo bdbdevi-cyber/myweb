@@ -101,6 +101,73 @@
 .btn-orange:hover{
     background-color: #e66a00 !important;
 }
+
+
+
+/* WRAPPER */
+.pd-wrapper {
+    display: flex;
+    gap: 20px;
+    margin: 20px;
+    flex-wrap: wrap; /* important for mobile */
+}
+
+/* IMAGE CARD */
+.pd-image-card {
+    flex: 1;
+    min-width: 300px; /* prevents too small image */
+    text-align: center;
+}
+
+/* MAIN IMAGE */
+#mainProductImage {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+}
+
+/* THUMBNAILS */
+.thumbnail-images img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 10px;
+}
+.thumbnail-images img.active {
+    border-color: #7b2cbf;
+}
+
+/* INFO CARD */
+.pd-info-card {
+    flex: 1;
+    min-width: 280px;
+}
+
+/* BUTTONS FULL WIDTH ON MOBILE */
+.pd-buttons button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+    .pd-wrapper {
+        flex-direction: column;
+        margin: 10px;
+    }
+
+    #mainProductImage {
+        max-width: 100%;
+    }
+
+    .pd-info-card {
+        text-align: center;
+    }
+}
+
 </style>
 
 
